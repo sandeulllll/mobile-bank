@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: MobileBankingSystem
+
+  # ???
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bank
+    username: root
+    password: 1234
+
+  # ????
+  mvc:
+    static-path-pattern: /static/**
+  web:
+    resources:
+      static-locations: /static/**
+
+  # ????
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 10MB
+
+# ???
+server:
+  port: 8080
+
+# mybatis-plus
+mybatis-plus:
+  configuration:
+    # ??
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    # ????
+    db-config:
+      logic-not-delete-value: 1
+      logic-delete-value: 0
+
+# ??
+logging:
+  level:
+    web: debug
+    sql: debug
