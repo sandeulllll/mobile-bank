@@ -6,4 +6,17 @@
         select * from mobile where telephone = #{telephone}
     </select>
 
+    <insert id="addMobile" parameterType="com.ccnu.mobilebank.pojo.Mobile">
+        insert into
+            mobile(
+                   telephone,
+                   password,
+                   isDelete
+        )values(
+                #{telephone},
+                #{password},
+                #{isDelete}
+                )
+    </insert>
+
 </mapper>

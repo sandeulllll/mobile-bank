@@ -15,4 +15,5 @@ import com.ccnu.mobilebank.pojo.Personinfo;
 public interface MobileMapper extends BaseMapper<Mobile> {
     Mobile getMobileByTel(String telephone);
 
+    Integer addMobile(Mobile mobile);
 }

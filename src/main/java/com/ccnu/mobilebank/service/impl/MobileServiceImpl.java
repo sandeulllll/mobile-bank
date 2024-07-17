@@ -25,7 +25,7 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
         String password = mobile.getPassword();
         //TODO:检查手机号的用户是否在PersonInfo里存在
         Personinfo dbPersonInfo = personinfoMapper.getPersonInfoByTel(telephone);
-        if(dbPersonInfo != null){
+        if(dbPersonInfo == null){
             throw new ConditionException("该用户尚未登记！");
         }
         //TODO:检查手机号在Mobile表里是否已经存在
@@ -35,5 +35,9 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
         }
 
         //TODO：进行注册操作
+        //TODO：可能需要对其他字段进行设置
+        mobile.setIsDelete(false);
+        baseMapper.addMobile(mobile);
+
     }
 }
