@@ -12,5 +12,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2024-07-16
  */
 public interface IMobileService extends IService<Mobile> {
-
 }

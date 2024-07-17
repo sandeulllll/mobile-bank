@@ -1,21 +1,18 @@
 package com.ccnu.mobilebank.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ccnu.mobilebank.pojo.JsonResponse;
+import com.ccnu.mobilebank.pojo.Mobile;
+import com.ccnu.mobilebank.service.IMobileService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author Baomidou
- * @since 2024-07-16
- */
 @RestController
-@RequestMapping("/mobile")
+//@RequestMapping("/mobile")
 public class MobileController {
+
+    @Autowired
+    private IMobileService mobileService;
 
 
 }

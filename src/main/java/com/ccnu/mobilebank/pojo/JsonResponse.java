@@ -1,11 +1,8 @@
 package com.ccnu.mobilebank.pojo;
 
 public class JsonResponse<T> {
-    //返回的状态码
     private String code;
-    //返回的提示语
     private String msg;
-
     private T data;
 
     public JsonResponse(String code, String msg){
