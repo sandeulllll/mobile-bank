@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PersoninfoMapper extends BaseMapper<Personinfo> {
 
+    Personinfo getPersonInfoByTel(String telephone);
 }

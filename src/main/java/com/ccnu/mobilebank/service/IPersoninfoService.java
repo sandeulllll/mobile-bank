@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPersoninfoService extends IService<Personinfo> {
 
+    Personinfo getPersonInfoByTel(String telephone);
 }

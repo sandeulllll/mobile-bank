@@ -14,5 +14,14 @@ public class MobileController {
     @Autowired
     private IMobileService mobileService;
 
-
+    /**
+     * 注册成功返回提示信息即可
+     * @param mobile
+     * @return
+     */
+    @PostMapping("/register")
+    public JsonResponse<String> register(@RequestBody Mobile mobile){
+        mobileService.addMobile(mobile);
+        return JsonResponse.success();
+    }
 }
