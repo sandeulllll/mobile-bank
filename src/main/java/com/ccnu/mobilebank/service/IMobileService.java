@@ -13,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMobileService extends IService<Mobile> {
     void addMobile(Mobile mobile);
+
+    void updateMobilePassword(Mobile mobile);
+
+    String login(Mobile mobile) throws Exception;
 }

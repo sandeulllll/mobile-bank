@@ -24,4 +24,18 @@ public class MobileController {
         mobileService.addMobile(mobile);
         return JsonResponse.success();
     }
+
+    @PutMapping("/password")
+    public JsonResponse<String> updateMobilePassword(@RequestBody Mobile mobile){
+        mobileService.updateMobilePassword(mobile);
+        return JsonResponse.success();
+    }
+
+    @PutMapping("/user-tokens")
+    public JsonResponse<String> login(Mobile mobile) throws Exception {
+        String token = mobileService.login(mobile);
+        return new JsonResponse<>(token);
+    }
+
+
 }

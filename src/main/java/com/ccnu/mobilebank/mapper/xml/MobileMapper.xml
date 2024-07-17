@@ -19,4 +19,13 @@
                 )
     </insert>
 
+    <update id="updateMobilePassword" parameterType="com.ccnu.mobilebank.pojo.Mobile">
+        update
+            mobile
+        set
+            password = #{password}
+        where
+            telephone = #{telephone}
+    </update>
+
 </mapper>

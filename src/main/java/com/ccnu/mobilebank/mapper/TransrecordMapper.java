@@ -2,6 +2,11 @@ package com.ccnu.mobilebank.mapper;
 
 import com.ccnu.mobilebank.pojo.Transrecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +18,15 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TransrecordMapper extends BaseMapper<Transrecord> {
 
+    List<BigDecimal> getPeriodIncome(@Param("accountId") Integer accountId,
+                                     @Param("start") LocalDateTime start,
+                                     @Param("end") LocalDateTime end);
+
+    List<BigDecimal> getPeriodOutcome(@Param("accountId") Integer accountId,
+                                      @Param("start") LocalDateTime start,
+                                      @Param("end") LocalDateTime end);
+
+    List<Transrecord> getTransrecordsByAccountId(Integer accountId, int offset, int size);
+
+    void insertTransRecord(Transrecord transrecord);
 }

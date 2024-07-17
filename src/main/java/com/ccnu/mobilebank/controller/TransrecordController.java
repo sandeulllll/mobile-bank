@@ -1,18 +1,50 @@
 package com.ccnu.mobilebank.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ccnu.mobilebank.pojo.JsonResponse;
+import com.ccnu.mobilebank.pojo.Transrecord;
+import com.ccnu.mobilebank.service.ITransrecordService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author Baomidou
- * @since 2024-07-16
- */
-@Controller
-@RequestMapping("/transrecord")
-public class TransrecordController {
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+
+@RestController
+//@RequestMapping("/transrecord")
+public class TransrecordController {
+    @Autowired
+    private ITransrecordService transrecordService;
+
+    @PostMapping("/period-amounts")
+    public JsonResponse<List<List<BigDecimal>>> getPeriodAmounts(@RequestParam Integer accountId, @RequestParam LocalDateTime start,@RequestParam LocalDateTime end){
+        List<BigDecimal> income = transrecordService.getPeriodIncome(accountId,start,end);
+        List<BigDecimal> outcome = transrecordService.getPeriodOutcome(accountId,start,end);
+        List<List<BigDecimal>> periodAmounts = new ArrayList<>();
+        periodAmounts.add(income);
+        periodAmounts.add(outcome);
+        return new JsonResponse<>(periodAmounts);
+    }
+
+    @GetMapping("all-records")
+    public JsonResponse<List<Transrecord>> getTransrecords(
+            @RequestParam Integer accountId,
+            @RequestParam int page,
+            @RequestParam int size) {
+        List<Transrecord> allRecord =  transrecordService.getTransrecordsByAccountId(accountId, page, size);
+        return new JsonResponse<>(allRecord);
+    }
+
+    @PostMapping
+    public JsonResponse<Transrecord> transferMoney(
+            @RequestParam Integer fromAccountId,
+            @RequestParam Integer toAccountId,
+            @RequestParam BigDecimal amount,
+            @RequestParam String password) {
+        Transrecord transrecord = transrecordService.transferMoney(fromAccountId, toAccountId, amount, password);
+        return new JsonResponse<>(transrecord);
+    }
 }
