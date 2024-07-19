@@ -1,17 +1,9 @@
 package com.ccnu.mobilebank.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ccnu.mobilebank.mapper.AccountMapper;
-import com.ccnu.mobilebank.mapper.MobileMapper;
-import com.ccnu.mobilebank.mapper.MobileaccountMapper;
-import com.ccnu.mobilebank.mapper.PersoninfoMapper;
 import com.ccnu.mobilebank.pojo.Account;
-import com.ccnu.mobilebank.pojo.Mobile;
-import com.ccnu.mobilebank.pojo.Mobileaccount;
-import com.ccnu.mobilebank.pojo.Personinfo;
 import com.ccnu.mobilebank.service.IAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**

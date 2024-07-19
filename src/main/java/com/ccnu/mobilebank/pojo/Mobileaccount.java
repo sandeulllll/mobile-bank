@@ -56,4 +56,7 @@ public class Mobileaccount implements Serializable {
     @TableLogic
     @TableField("isDelete")
     private Boolean isDelete;
+
+    @TableField(exist = false)
+    private Account account;
 }

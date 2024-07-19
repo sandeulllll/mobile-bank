@@ -37,22 +37,23 @@ public class AccountController {
 
     // 查询银行卡账户列表
     @GetMapping("/listBankAccount")
-    public JsonResponse<Map> listBankAccount(){
+    public JsonResponse<List> listBankAccount(){
         // 1. 获取登录用户的手机号id
         Integer mobileId = userSupport.getCurrentMobileId();
+//        Integer mobileId = 16;
+
         // 2. 在mobileaccount表中查询绑定该手机号的accountid
         Map<String,Object> map = new HashMap<>();
         map.put("telId",mobileId);
         List<Mobileaccount> list = mobileaccountService.listByMap(map);
 
         // 3. 在account列表中查询银行卡信息，返回mobileaccount中的id和account的信息的map
-        Map<Integer,Account> map1 = new HashMap<>();
         for(Mobileaccount mobileaccount : list){
             Account account = accountService.getById(mobileaccount.getAccountId());
-            map1.put(mobileaccount.getId(), account);
+            mobileaccount.setAccount(account);
         }
 
-        return new JsonResponse<>(map1);
+        return new JsonResponse<>(list);
     }
 
     // 新增关联账户
@@ -60,13 +61,13 @@ public class AccountController {
     public JsonResponse<String> addRelatedAccount(@RequestParam String accountName){
         // 1. 获取用户的personId
         Integer personId = userSupport.getCurrentPersonId();
-
+//        Integer personId = 3;
         // 2. 在account表中查询对应的银行卡信息
         QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("accountName",accountName).eq("personId",personId);
         Account account = accountService.getOne(queryWrapper);
         if(account==null)
-            throw new ConditionException("银行卡号错误");
+            throw new ConditionException("银行卡号错误!");
 
         // 3. 存在，将信息加入mobileaccount表中
         Integer mobileId = userSupport.getCurrentMobileId();
@@ -93,7 +94,7 @@ public class AccountController {
         queryWrapper.eq("accountName",accountName);
         Account account = accountService.getOne(queryWrapper);
         if(!account.getPassword().equals(password))
-            throw new ConditionException("密码错误");
+            throw new ConditionException("密码错误!");
         return JsonResponse.success();
     }
 
@@ -105,7 +106,7 @@ public class AccountController {
         Account account = new Account();
         account.setPassword(password);
         if(!accountService.update(account, queryWrapper))
-            throw new ConditionException("修改密码失败");
+            throw new ConditionException("修改密码失败!");
         return JsonResponse.success();
     }
 
