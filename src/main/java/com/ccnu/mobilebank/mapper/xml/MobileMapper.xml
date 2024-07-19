@@ -32,6 +32,4 @@
         select * from mobile where id = #{id}
     </select>
 
-
-
 </mapper>

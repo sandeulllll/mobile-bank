@@ -74,3 +74,4 @@ public class Personinfo implements Serializable {
      */
     private Boolean isDelete;
 }
+

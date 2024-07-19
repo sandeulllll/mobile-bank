@@ -52,3 +52,4 @@ public class Mobile implements Serializable {
      */
     private Boolean isDelete;
 }
+

@@ -1,5 +1,6 @@
 package com.ccnu.mobilebank.mapper;
 
+import com.ccnu.mobilebank.pojo.Personinfo;
 import com.ccnu.mobilebank.pojo.UserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -13,4 +14,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
+    // 获取头像
+    String getAvatar(String mobileId);
+
+
+
+    // 修改头像
+    void updateAvatar(String personId, String avatar);
 }

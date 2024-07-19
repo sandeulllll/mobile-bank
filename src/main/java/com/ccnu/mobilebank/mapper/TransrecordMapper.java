@@ -29,3 +29,4 @@ public interface TransrecordMapper extends BaseMapper<Transrecord> {
 
     void insertTransRecord(Transrecord transrecord);
 }
+

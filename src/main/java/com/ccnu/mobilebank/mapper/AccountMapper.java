@@ -19,3 +19,4 @@ public interface AccountMapper extends BaseMapper<Account> {
 
     Integer getPersonIdByAccountId(Integer id);
 }
+

@@ -12,5 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2024-07-16
  */
 public interface RecipientMapper extends BaseMapper<Recipient> {
+    // 获取联系人列表
+
 
 }

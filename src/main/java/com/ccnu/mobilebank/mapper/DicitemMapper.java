@@ -14,3 +14,4 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface DicitemMapper extends BaseMapper<Dicitem> {
 
 }
+

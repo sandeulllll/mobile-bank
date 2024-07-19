@@ -3,3 +3,4 @@
 <mapper namespace="com.ccnu.mobilebank.mapper.UserInfoMapper">
 
 </mapper>
+
