@@ -6,6 +6,11 @@
             account
         set
             balance = #{balance}
+        where id = #{id}
     </update>
+
+    <select id="getAccountById" parameterType="java.lang.Integer" resultType="com.ccnu.mobilebank.pojo.Account">
+        select * from account where id = #{id}
+    </select>
 
 </mapper>

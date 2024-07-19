@@ -9,6 +9,7 @@ import com.ccnu.mobilebank.service.ITransrecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -28,17 +29,17 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     @Autowired
     private AccountMapper accountMapper;
 
-    @Override
+    /*@Override
     public List<BigDecimal> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end) {
         List<BigDecimal> income = baseMapper.getPeriodIncome(accountId, start, end);
         return income;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public List<BigDecimal> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end) {
         List<BigDecimal> outcome = baseMapper.getPeriodOutcome(accountId,start,end);
         return outcome;
-    }
+    }*/
 
     @Override
     public List<Transrecord> getTransrecordsByAccountId(Integer accountId, int page, int size) {
@@ -48,25 +49,28 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
 
     @Override
     public Transrecord transferMoney(Integer fromAccountId, Integer toAccountId, BigDecimal amount, String password) {
-        //验证收款账户是否存在
-        Account toAccount = accountMapper.selectById(toAccountId);
-        if(toAccount == null){
-            throw new ConditionException("收款账户不存在!");
+        Account fromAccount = accountMapper.getAccountById(fromAccountId);
+        if(fromAccount.getStatusId() == 0){
+            throw new ConditionException("本账户已被冻结!");
+        }
+        //验证收款账户是否被冻结
+        Account toAccount = accountMapper.getAccountById(toAccountId);
+        if(toAccount.getStatusId() == 0){
+            throw new ConditionException("收款账户已被冻结!");
         }
         //验证支付密码
-        Account fromAccount = accountMapper.selectById(fromAccountId);
         String dbPassword = fromAccount.getPassword();
         if(!dbPassword.equals(password)){
             throw new ConditionException("支付密码错误!");
         }
-        //TODO:转账金额限制
 
         //检查当前用户余额是否足够
         if(fromAccount.getBalance().compareTo(amount) < 0){
-            throw new ConditionException("账户余额不足！");
+            throw new ConditionException("当前账户余额不足！");
         }
         //更新支付账户余额
-        BigDecimal newFromBalance = fromAccount.getBalance().subtract(amount);
+        BigDecimal balance = fromAccount.getBalance();
+        BigDecimal newFromBalance = balance.subtract(amount);
         fromAccount.setBalance(newFromBalance);
         accountMapper.updateBalance(fromAccount);
 

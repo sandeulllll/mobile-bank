@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ccnu.mobilebank.mapper.TransrecordMapper">
-    <select id="getPeriodIncome" resultType="java.math.BigDecimal">
+   <!-- <select id="getPeriodIncome" resultType="java.math.BigDecimal">
         select
                SUM(money)
         from
@@ -10,9 +10,9 @@
               otherId = #{accountId}
           and updateTime between #{start} and #{end}
           and isDelete = 0
-    </select>
+    </select>-->
 
-    <select id="getPeriodOutcome" resultType="java.math.BigDecimal">
+    <!--<select id="getPeriodOutcome" resultType="java.math.BigDecimal">
         select
             SUM(money)
         from
@@ -21,15 +21,15 @@
             accountId = #{accountId}
           and updateTime between #{start} and #{end}
           and isDelete = 0
-    </select>
+    </select>-->
 
-    <select id="getTransrecordsByAccountId" resultType="com.example.model.Transrecord">
+    <select id="getTransrecordsByAccountId" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         SELECT *
         FROM transrecord
         WHERE (accountId = #{accountId} OR otherId = #{accountId})
           AND isDelete = 0
         ORDER BY updateTime DESC
-        LIMIT #{limit} OFFSET #{offset}
+        LIMIT #{size} OFFSET #{offset}
     </select>
 
     <insert id="insertTransRecord" parameterType="com.ccnu.mobilebank.pojo.Transrecord">

@@ -18,4 +18,7 @@ public interface MobileMapper extends BaseMapper<Mobile> {
     Integer addMobile(Mobile mobile);
 
     Integer updateMobilePassword(Mobile mobile);
+
+    Mobile getMobileById(Integer id);
+
 }

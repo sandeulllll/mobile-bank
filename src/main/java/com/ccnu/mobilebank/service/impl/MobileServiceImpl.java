@@ -20,16 +20,20 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
     @Autowired
     private PersoninfoMapper personinfoMapper;
 
+    /**
+     * 1.检查手机号的用户是否在PersonInfo里存在
+     * 2.检查手机号在Mobile表里是否已经存在
+     * 3.进行注册操作
+     * @param mobile
+     */
     @Override
     public void addMobile(Mobile mobile) {
         String telephone = mobile.getTelephone();
         String password = mobile.getPassword();
-        //TODO:检查手机号的用户是否在PersonInfo里存在
         Personinfo dbPersonInfo = personinfoMapper.getPersonInfoByTel(telephone);
         if(dbPersonInfo == null){
-            throw new ConditionException("该用户尚未登记！");
+            throw new ConditionException("该用户尚未实名登记！");
         }
-        //TODO:检查手机号在Mobile表里是否已经存在
         Mobile dbMobile = baseMapper.getMobileByTel(telephone);
         if(dbMobile != null) {
             throw new ConditionException("该手机号已经注册！");
@@ -41,30 +45,59 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
         baseMapper.addMobile(mobile);
     }
 
+    /**
+     * 1. 验证原密码是否正确
+     * 2. 进行update操作
+     * @param id
+     * @param password
+     * @param newPassword
+     */
     @Override
-    public void updateMobilePassword(Mobile mobile) {
-        //TODO:可能需要对密码进行判断
-        //TODO:可能需要对其他字段进行操作
-        baseMapper.updateMobilePassword(mobile);
+    public void updateMobilePassword(Integer id, String password, String newPassword) {
+        Mobile dbMobile = baseMapper.getMobileById(id);
+        String dbPassword = dbMobile.getPassword();
+        if(!dbPassword.equals(password)){
+            throw new ConditionException("请输入正确的原密码!");
+        }
+        dbMobile.setPassword(newPassword);
+        baseMapper.updateMobilePassword(dbMobile);
     }
 
     @Override
+    public void updateMobilePassword(Integer mobileId, String newPassword) {
+        Mobile dbMobile = baseMapper.getMobileById(mobileId);
+        dbMobile.setPassword(newPassword);
+        baseMapper.updateMobilePassword(dbMobile);
+    }
+
+
+    /**
+     * 1. 验证手机号是否已注册
+     * 2. 验证密码是否正确
+     * 3. 生成token返回
+     * @param mobile
+     * @return
+     * @throws Exception
+     */
+    @Override
     public String login(Mobile mobile) throws Exception {
-        //TODO:验证手机号账户是否存在
-        //TODO:验证密码是否正确
         String telephone = mobile.getTelephone();
-        String password = mobile.getPassword();
         Mobile dbMobile = baseMapper.getMobileByTel(telephone);
         if(dbMobile == null){
             throw new ConditionException("该手机号未注册！");
         }
-        String dbPassword = dbMobile.getPassword();
-        if(!password.equals(dbPassword)){
-            throw new ConditionException("密码错误!");
+        if(mobile.getPassword() != null){
+            String password = mobile.getPassword();
+            String dbPassword = dbMobile.getPassword();
+            if(!password.equals(dbPassword)){
+                throw new ConditionException("密码错误!");
+            }
         }
         Personinfo dbPersonInfo = personinfoMapper.getPersonInfoByTel(telephone);
         Integer personId = dbPersonInfo.getId();
         Integer mobileId = dbMobile.getId();
         return TokenUtil.generateToken(mobileId,personId);
     }
+
+
 }

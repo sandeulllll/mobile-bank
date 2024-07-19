@@ -8,14 +8,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author Baomidou
- * @since 2024-07-16
- */
+
 @Getter
 @Setter
 public class Transrecord implements Serializable {
@@ -50,6 +43,7 @@ public class Transrecord implements Serializable {
      */
     private Integer transtypeId;
 
+
     /**
      * 创建时间
      */
@@ -59,6 +53,7 @@ public class Transrecord implements Serializable {
      * 更新时间
      */
     private LocalDateTime updateTime;
+
 
     /**
      * 逻辑删除（0 未删除、1 删除）

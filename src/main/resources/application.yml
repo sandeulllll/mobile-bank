@@ -2,14 +2,14 @@ spring:
   application:
     name: MobileBankingSystem
 
-  # ???
+  # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mobilebank
     username: root
     password: 123456
 
-  # ????
+  # 静态文件？
   mvc:
     static-path-pattern: /static/**
   web:
@@ -22,7 +22,7 @@ spring:
       max-file-size: 1MB
       max-request-size: 10MB
 
-# ???
+# 端口配置
 server:
   port: 8080
 
@@ -43,3 +43,9 @@ logging:
   level:
     web: debug
     sql: debug
+
+# Redis 连接信息
+#redis:
+#  host: 127.0.0.1
+#  port: 6379
+

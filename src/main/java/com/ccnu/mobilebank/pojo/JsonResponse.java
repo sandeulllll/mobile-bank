@@ -16,6 +16,9 @@ public class JsonResponse<T> {
         code = "0";
     }
 
+    /*public static JsonResponse<String> success(String msg){
+
+    }*/
     //不需要返回给前端但是请求成功的场景
     public static JsonResponse<String> success(){
         return new JsonResponse<>(null);

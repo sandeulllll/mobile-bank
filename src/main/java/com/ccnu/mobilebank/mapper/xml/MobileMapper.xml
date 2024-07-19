@@ -25,7 +25,13 @@
         set
             password = #{password}
         where
-            telephone = #{telephone}
+            id = #{id}
     </update>
+
+    <select id="getMobileById" parameterType="java.lang.Integer" resultType="com.ccnu.mobilebank.pojo.Mobile">
+        select * from mobile where id = #{id}
+    </select>
+
+
 
 </mapper>
