@@ -41,6 +41,7 @@ public class AccountController {
         // 1. 获取登录用户的手机号id
         Integer mobileId = userSupport.getCurrentMobileId();
 //        Integer mobileId = 16;
+
         // 2. 在mobileaccount表中查询绑定该手机号的accountid
         Map<String,Object> map = new HashMap<>();
         map.put("telId",mobileId);
