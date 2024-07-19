@@ -32,11 +32,11 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
         String password = mobile.getPassword();
         Personinfo dbPersonInfo = personinfoMapper.getPersonInfoByTel(telephone);
         if(dbPersonInfo == null){
-            throw new ConditionException("该用户尚未实名登记！");
+            throw new ConditionException("503","该用户尚未实名登记！");
         }
         Mobile dbMobile = baseMapper.getMobileByTel(telephone);
         if(dbMobile != null) {
-            throw new ConditionException("该手机号已经注册！");
+            throw new ConditionException("504","该手机号已经注册！");
         }
 
         //TODO：进行注册操作
@@ -57,7 +57,7 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
         Mobile dbMobile = baseMapper.getMobileById(id);
         String dbPassword = dbMobile.getPassword();
         if(!dbPassword.equals(password)){
-            throw new ConditionException("请输入正确的原密码!");
+            throw new ConditionException("505","请输入正确的原密码!");
         }
         dbMobile.setPassword(newPassword);
         baseMapper.updateMobilePassword(dbMobile);
@@ -84,13 +84,13 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
         String telephone = mobile.getTelephone();
         Mobile dbMobile = baseMapper.getMobileByTel(telephone);
         if(dbMobile == null){
-            throw new ConditionException("该手机号未注册！");
+            throw new ConditionException("506","该手机号未注册！");
         }
         if(mobile.getPassword() != null){
             String password = mobile.getPassword();
             String dbPassword = dbMobile.getPassword();
             if(!password.equals(dbPassword)){
-                throw new ConditionException("密码错误!");
+                throw new ConditionException("507","请重新输入密码！");
             }
         }
         Personinfo dbPersonInfo = personinfoMapper.getPersonInfoByTel(telephone);

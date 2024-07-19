@@ -48,9 +48,9 @@ public class TokenUtil {
             mobileAndPerson.add(personId);
             return mobileAndPerson;
         }catch (TokenExpiredException e){
-            throw new ConditionException("555","token过期！");
+            throw new ConditionException("599","token过期！");
         }catch (Exception e){
-            throw new ConditionException("非法用户token！");
+            throw new ConditionException("598","非法用户token！");
         }
         }
 }

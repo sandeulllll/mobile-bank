@@ -39,10 +39,10 @@ public class MobileController {
     public JsonResponse<String> verifyCode(@RequestParam String phone, @RequestParam String code){
         String cacheCode = redisTemplate.opsForValue().get(phone);
         if (cacheCode == null) {
-            throw new ConditionException("验证码已过期，请重新获取！");
+            throw new ConditionException("501","验证码已过期，请重新获取！");
         }
         if (!cacheCode.equals(code)) {
-            throw new ConditionException("验证码错误！");
+            throw new ConditionException("502","验证码错误！");
         }
         return JsonResponse.success();
     }
@@ -67,10 +67,10 @@ public class MobileController {
         //从 Redis 中获取验证码
         String cacheCode = redisTemplate.opsForValue().get(phone);
         if (cacheCode == null) {
-            throw new ConditionException("验证码已过期，请重新获取！");
+            throw new ConditionException("501","验证码已过期，请重新获取！");
         }
         if (!cacheCode.equals(code)) {
-            throw new ConditionException("验证码错误！");
+            throw new ConditionException("502","验证码错误！");
         }
         //TODO：验证码通过，需要进行其他逻辑判断
         Mobile mobile = new Mobile();
