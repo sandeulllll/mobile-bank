@@ -39,21 +39,21 @@ public class RecipientController {
 
     // 获取联系人列表
     @GetMapping("/list")
-    public JsonResponse<Map> getRecipientList() {
+    public JsonResponse<List> getRecipientList() {
         // 1. 根据登录用户的telId在recipient中查询联系人的列表
         Integer mobileId = userSupport.getCurrentMobileId();
+//        Integer mobileId = 16;
         Map<String,Object> map = new HashMap<>();
         map.put("telId",mobileId);
         List<Recipient> list = recipientService.listByMap(map);
 
         // 2. 使用列表中的otherId在personinfo表中获取联系人的具体信息，并与recipent中的id绑定返回
-        Map<Integer,Personinfo> map1 = new HashMap<>();
         for (Recipient recipients:list){
             Personinfo personinfo = personinfoService.getById(recipients.getOtherId());
-            map1.put(recipients.getId(), personinfo);
+            recipients.setPersoninfo(personinfo);
         }
 
-        return new JsonResponse<>(map1);
+        return new JsonResponse<>(list);
     }
 
     // 删除联系人
@@ -71,7 +71,7 @@ public class RecipientController {
         queryWrapper.eq("telephone",telephone).eq("realname",name);
         Personinfo personinfo = personinfoService.getOne(queryWrapper);
         if(personinfo == null)
-            throw new ConditionException("用户不存在");
+            throw new ConditionException("用户不存在!");
 
         // 2. 存在，将其加入recipient
         Recipient recipient = new Recipient();

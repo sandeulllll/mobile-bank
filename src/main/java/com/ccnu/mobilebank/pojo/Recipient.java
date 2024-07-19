@@ -3,10 +3,11 @@ package com.ccnu.mobilebank.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -54,4 +55,7 @@ public class Recipient implements Serializable {
      */
     @TableField("isDelete")
     private Boolean isDelete;
+
+    @TableField(exist=false)
+    private Personinfo personinfo;
 }

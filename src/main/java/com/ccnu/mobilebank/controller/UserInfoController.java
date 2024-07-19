@@ -21,6 +21,7 @@ import java.util.UUID;
 
 /**
  * 个人信息
+ *
  * @author Baomidou
  * @since 2024-07-16
  */
@@ -60,7 +61,7 @@ public class UserInfoController {
     public JsonResponse updateAvatar(@RequestParam MultipartFile image, HttpServletRequest request) throws IOException {
         // 1. 获取原始文件名
         String originalFilename = image.getOriginalFilename();
-        if(originalFilename == null || originalFilename.isEmpty())
+        if (originalFilename == null || originalFilename.isEmpty())
             throw new ConditionException("路径错误");
 
         // 2. 构建新的文件名
@@ -84,12 +85,12 @@ public class UserInfoController {
         // 5. 存储完整路径
         String fileUrl = "/files/" + newFileName;
         Integer mobileId = userSupport.getCurrentMobileId();
-        QueryWrapper<UserInfo> queryWrapper =new QueryWrapper<>();
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("mobileId", mobileId);
 
         // 5.1 用户尚未上传头像
         UserInfo userInfo = userInfoService.getOne(queryWrapper);
-        if(userInfo == null){
+        if (userInfo == null) {
             userInfo = new UserInfo(); // 需要初始化UserInfo对象
             userInfo.setAvatar(fileUrl);
             userInfo.setMobileId(mobileId);
@@ -105,17 +106,17 @@ public class UserInfoController {
 
     // 验证登录密码
     @PostMapping("/verifyPassword")
-    public JsonResponse<String> verifyPassword(@RequestParam String password){
+    public JsonResponse<String> verifyPassword(@RequestParam String password) {
         Integer mobileId = userSupport.getCurrentMobileId();
         Mobile mobile = mobileService.getById(mobileId);
-        if(!mobile.getPassword().equals(password))
+        if (!mobile.getPassword().equals(password))
             throw new ConditionException("密码错误");
         return JsonResponse.success();
     }
 
     // 修改登录密码
     @PutMapping("/updatePassword")
-    public JsonResponse<String> updatePassword(@RequestParam String password){
+    public JsonResponse<String> updatePassword(@RequestParam String password) {
         Integer mobileId = userSupport.getCurrentMobileId();
         Mobile mobile = new Mobile();
         mobile.setPassword(password);
