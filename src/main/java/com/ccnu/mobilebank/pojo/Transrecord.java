@@ -1,6 +1,7 @@
 package com.ccnu.mobilebank.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,11 +29,13 @@ public class Transrecord implements Serializable {
     /**
      * 支付的账户id
      */
+    @TableField("accountId")
     private Integer accountId;
 
     /**
      * 收款的账户id
      */
+    @TableField("otherId")
     private Integer otherId;
 
     /**
@@ -43,25 +46,30 @@ public class Transrecord implements Serializable {
     /**
      * 交易日期
      */
+    @TableField("transDate")
     private String transDate;
 
     /**
      * 交易类型
      */
+    @TableField("transtypeId")
     private Integer transtypeId;
 
     /**
      * 创建时间
      */
+    @TableField("createTime")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
+    @TableField("updateTime")
     private LocalDateTime updateTime;
 
     /**
      * 逻辑删除（0 未删除、1 删除）
      */
+    @TableField("isDelete")
     private Boolean isDelete;
 }

@@ -2,45 +2,45 @@ spring:
   application:
     name: MobileBankingSystem
 
-  # ???
+  # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bank
     username: root
     password: 1234
 
-  # ????
+  # 静态文件
   mvc:
     static-path-pattern: /static/**
   web:
     resources:
       static-locations: /static/**
 
-  # ????
+  # 文件大小
   servlet:
     multipart:
       max-file-size: 1MB
       max-request-size: 10MB
 
-# ???
+# 端口号
 server:
   port: 8080
 
 # mybatis-plus
 mybatis-plus:
   configuration:
-    # ??
+    # 日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
-    # ????
+    # 逻辑删除
     db-config:
-      logic-not-delete-value: 1
-      logic-delete-value: 0
+      logic-not-delete-value: 0
+      logic-delete-value: 1
 
 
 
 
-# ??
+# 日志
 logging:
   level:
     web: debug
