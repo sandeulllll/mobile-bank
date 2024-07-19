@@ -13,4 +13,8 @@
         select * from account where id = #{id}
     </select>
 
+    <select id="getPersonIdByAccountId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select personId from account where id = #{id}
+    </select>
+
 </mapper>

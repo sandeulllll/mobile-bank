@@ -16,4 +16,6 @@ public interface AccountMapper extends BaseMapper<Account> {
     void updateBalance(Account fromAccount);
 
     Account getAccountById(Integer id);
+
+    Integer getPersonIdByAccountId(Integer id);
 }

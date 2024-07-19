@@ -5,4 +5,8 @@
     <select id="getPersonInfoByTel" parameterType="java.lang.String" resultType="com.ccnu.mobilebank.pojo.Personinfo">
         select * from personinfo where telephone = #{telephone}
     </select>
+
+    <select id="getPersonNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select realname from personinfo where id = #{id}
+    </select>
 </mapper>

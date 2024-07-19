@@ -19,7 +19,7 @@ public class TransrecordController {
     @Autowired
     private ITransrecordService transrecordService;
 
-    /*@PostMapping("/period-amounts")
+    @PostMapping("/period-amounts")
     public JsonResponse<List<List<BigDecimal>>> getPeriodAmounts(@RequestParam Integer accountId, @RequestParam LocalDateTime start,@RequestParam LocalDateTime end){
         List<BigDecimal> income = transrecordService.getPeriodIncome(accountId,start,end);
         List<BigDecimal> outcome = transrecordService.getPeriodOutcome(accountId,start,end);
@@ -27,7 +27,7 @@ public class TransrecordController {
         periodAmounts.add(income);
         periodAmounts.add(outcome);
         return new JsonResponse<>(periodAmounts);
-    }*/
+    }
 
     //根据账户id查询所有交易记录(已测试)
     @PostMapping("/all-records")

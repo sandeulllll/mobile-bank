@@ -1,7 +1,9 @@
 package com.ccnu.mobilebank.service.impl;
 
 import com.ccnu.mobilebank.mapper.AccountMapper;
+import com.ccnu.mobilebank.mapper.PersoninfoMapper;
 import com.ccnu.mobilebank.pojo.Account;
+import com.ccnu.mobilebank.pojo.Personinfo;
 import com.ccnu.mobilebank.pojo.Transrecord;
 import com.ccnu.mobilebank.mapper.TransrecordMapper;
 import com.ccnu.mobilebank.pojo.exception.ConditionException;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,22 +32,40 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     @Autowired
     private AccountMapper accountMapper;
 
-    /*@Override
+    @Autowired
+    private PersoninfoMapper personinfoMapper;
+
+    @Override
     public List<BigDecimal> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end) {
         List<BigDecimal> income = baseMapper.getPeriodIncome(accountId, start, end);
         return income;
-    }*/
+    }
 
-    /*@Override
+    @Override
     public List<BigDecimal> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end) {
         List<BigDecimal> outcome = baseMapper.getPeriodOutcome(accountId,start,end);
         return outcome;
-    }*/
+    }
 
     @Override
     public List<Transrecord> getTransrecordsByAccountId(Integer accountId, int page, int size) {
+//        分页查询
         int offset = (page - 1) * size;
-        return baseMapper.getTransrecordsByAccountId(accountId, offset, size);
+//        得到该账户的交易记录
+        List<Transrecord> transrecords =  baseMapper.getTransrecordsByAccountId(accountId, offset, size);
+        for(Transrecord transrecord : transrecords){
+            Integer fromAccountId = transrecord.getAccountId();
+            Integer toAccountId = transrecord.getOtherId();
+            Integer personId;
+            if(fromAccountId.equals(accountId)){
+                personId = accountMapper.getPersonIdByAccountId(toAccountId);
+            }else {
+                personId = accountMapper.getPersonIdByAccountId(fromAccountId);
+            }
+            String personName = personinfoMapper.getPersonNameById(personId);
+            transrecord.setToPerson(personName);
+        }
+        return transrecords;
     }
 
     @Override

@@ -59,4 +59,7 @@ public class Transrecord implements Serializable {
      * 逻辑删除（0 未删除、1 删除）
      */
     private Boolean isDelete;
+
+    //冗余字段
+    private String toPerson;
 }

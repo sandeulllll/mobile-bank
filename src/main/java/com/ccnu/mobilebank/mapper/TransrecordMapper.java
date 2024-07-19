@@ -17,13 +17,13 @@ import java.util.List;
  * @since 2024-07-16
  */
 public interface TransrecordMapper extends BaseMapper<Transrecord> {
-    /*List<BigDecimal> getPeriodIncome(@Param("accountId") Integer accountId,
+    List<BigDecimal> getPeriodIncome(@Param("accountId") Integer accountId,
                                      @Param("start") LocalDateTime start,
                                      @Param("end") LocalDateTime end);
 
     List<BigDecimal> getPeriodOutcome(@Param("accountId") Integer accountId,
                                       @Param("start") LocalDateTime start,
-                                      @Param("end") LocalDateTime end);*/
+                                      @Param("end") LocalDateTime end);
 
     List<Transrecord> getTransrecordsByAccountId(@Param("accountId") Integer accountId,
                                                  @Param("offset") int offset,
