@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-//@RequestMapping("/transrecord")
+@RequestMapping("/transrecord")
 public class TransrecordController {
     @Autowired
     private ITransrecordService transrecordService;

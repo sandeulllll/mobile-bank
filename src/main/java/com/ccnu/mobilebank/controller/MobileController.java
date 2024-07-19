@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 @RestController
-//@RequestMapping("/mobile")
+@RequestMapping("/users")
 public class MobileController {
 
     @Autowired
