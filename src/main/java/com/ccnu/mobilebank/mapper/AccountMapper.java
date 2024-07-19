@@ -12,6 +12,4 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2024-07-16
  */
 public interface AccountMapper extends BaseMapper<Account> {
-    // 修改银行卡密码
-    void updatePassword(String accountNumber, String newPassword);
 }

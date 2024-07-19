@@ -12,6 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2024-07-16
  */
 public interface IPersoninfoService extends IService<Personinfo> {
-    // 获取用户个人信息
-    Personinfo getPersonInfo(Integer personId);
+
 }

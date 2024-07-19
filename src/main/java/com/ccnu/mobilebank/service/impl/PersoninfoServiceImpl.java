@@ -17,8 +17,4 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersoninfoServiceImpl extends ServiceImpl<PersoninfoMapper, Personinfo> implements IPersoninfoService {
 
-    @Override
-    public Personinfo getPersonInfo(Integer personId){
-        return baseMapper.selectByPersonId(personId);
-    }
 }

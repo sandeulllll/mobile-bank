@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2024-07-16
  */
 public interface IMobileaccountService extends IService<Mobileaccount> {
-
+    boolean removeBankAccount(Integer id, Integer mobileId);
 }
