@@ -110,7 +110,7 @@ public class UserInfoController {
         Integer mobileId = userSupport.getCurrentMobileId();
         Mobile mobile = mobileService.getById(mobileId);
         if (!mobile.getPassword().equals(password))
-            throw new ConditionException("密码错误");
+            throw new ConditionException("505","登录密码错误！");
         return JsonResponse.success();
     }
 

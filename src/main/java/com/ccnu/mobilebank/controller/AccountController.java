@@ -58,18 +58,29 @@ public class AccountController {
     // 新增关联账户
     @PostMapping("/addRelatedAccount")
     public JsonResponse<String> addRelatedAccount(@RequestParam String accountName){
-        // 1. 获取用户的personId
+        // 1. 获取用户的personId，mobileId
         Integer personId = userSupport.getCurrentPersonId();
+        Integer mobileId = userSupport.getCurrentMobileId();
 //        Integer personId = 3;
         // 2. 在account表中查询对应的银行卡信息
         QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("accountName",accountName).eq("personId",personId);
         Account account = accountService.getOne(queryWrapper);
         if(account==null)
-            throw new ConditionException("银行卡号错误!");
+            throw new ConditionException("507","银行卡号错误!");
 
-        // 3. 存在，将信息加入mobileaccount表中
-        Integer mobileId = userSupport.getCurrentMobileId();
+        // 3. 在mobileaccount表中查询绑定该手机号的accountid
+        Map<String,Object> map = new HashMap<>();
+        map.put("telId",mobileId);
+        List<Mobileaccount> list = mobileaccountService.listByMap(map);
+
+        // 4. 判断该银行卡是否已经绑定
+        for(Mobileaccount mobileaccount : list){
+            if(mobileaccount.getAccountId().equals(account.getId()))
+                 throw new ConditionException("513","该银行卡已绑定!");
+        }
+
+        // 5. 未绑定，将信息加入mobileaccount表中
         Mobileaccount mobileaccount = new Mobileaccount();
         mobileaccount.setAccountId(account.getId());
         mobileaccount.setTelId(mobileId);
@@ -93,7 +104,7 @@ public class AccountController {
         queryWrapper.eq("accountName",accountName);
         Account account = accountService.getOne(queryWrapper);
         if(!account.getPassword().equals(password))
-            throw new ConditionException("密码错误!");
+            throw new ConditionException("510","支付密码错误!");
         return JsonResponse.success();
     }
 
@@ -104,8 +115,6 @@ public class AccountController {
         queryWrapper.eq("accountName",accountName);
         Account account = new Account();
         account.setPassword(password);
-        if(!accountService.update(account, queryWrapper))
-            throw new ConditionException("修改密码失败!");
         return JsonResponse.success();
     }
 
