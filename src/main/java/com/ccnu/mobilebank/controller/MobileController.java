@@ -12,7 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
-@CrossOrigin
+
 @RestController
 @RequestMapping("/users")
 public class MobileController {
@@ -26,6 +26,10 @@ public class MobileController {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
+    @GetMapping("/test")
+    public String test(){
+        return "success!";
+    }
     //获取验证码(测试完毕)
     @PostMapping("/get-code")
     public JsonResponse<String> getCode(@RequestParam String telephone) {
