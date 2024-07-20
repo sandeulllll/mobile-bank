@@ -9,6 +9,7 @@ import com.ccnu.mobilebank.mapper.TransrecordMapper;
 import com.ccnu.mobilebank.pojo.exception.ConditionException;
 import com.ccnu.mobilebank.service.ITransrecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ccnu.mobilebank.support.UserSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ import java.util.List;
 @Service
 public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Transrecord> implements ITransrecordService {
 
+    @Autowired
+    private UserSupport userSupport;
     @Autowired
     private AccountMapper accountMapper;
 
@@ -69,16 +72,18 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     }
 
     @Override
-    public Transrecord transferMoney(Integer fromAccountId, Integer toAccountId, BigDecimal amount, String password) {
+    public Transrecord transferMoney(Integer fromAccountId,String toAccountName, BigDecimal amount, String password) {
         Account fromAccount = accountMapper.getAccountById(fromAccountId);
         if(fromAccount.getStatusId() == 0){
             throw new ConditionException("508","本账户已被冻结!");
         }
+
         //验证收款账户是否被冻结
-        Account toAccount = accountMapper.getAccountById(toAccountId);
+        Account toAccount = accountMapper.getAccountByAccountName(toAccountName);
         if(toAccount.getStatusId() == 0){
             throw new ConditionException("509","收款账户已被冻结!");
         }
+
         //验证支付密码
         String dbPassword = fromAccount.getPassword();
         if(!dbPassword.equals(password)){
@@ -103,6 +108,7 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
         //更新交易记录
         Transrecord transrecord = new Transrecord();
         transrecord.setAccountId(fromAccountId);
+        Integer toAccountId = toAccount.getId();
         transrecord.setOtherId(toAccountId);
         transrecord.setMoney(amount);
         transrecord.setTransDate(LocalDateTime.now().toString());

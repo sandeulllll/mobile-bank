@@ -25,6 +25,7 @@ import java.util.UUID;
  * @author Baomidou
  * @since 2024-07-16
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class UserInfoController {

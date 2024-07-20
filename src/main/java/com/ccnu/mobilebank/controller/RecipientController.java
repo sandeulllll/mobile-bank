@@ -24,6 +24,7 @@ import java.util.Map;
  * @author Baomidou
  * @since 2024-07-16
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/friends")
 public class RecipientController {

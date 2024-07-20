@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class MobileController {

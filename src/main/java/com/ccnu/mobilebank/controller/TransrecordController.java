@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/transrecord")
 public class TransrecordController {
@@ -57,10 +57,10 @@ public class TransrecordController {
     @PostMapping("/trans-money")
     public JsonResponse<Transrecord> transferMoney(
             @RequestParam Integer fromAccountId,
-            @RequestParam Integer toAccountId,
+            @RequestParam String toAccountName,
             @RequestParam BigDecimal amount,
             @RequestParam String password) {
-        Transrecord transrecord = transrecordService.transferMoney(fromAccountId, toAccountId, amount, password);
+        Transrecord transrecord = transrecordService.transferMoney(fromAccountId,toAccountName, amount, password);
         return new JsonResponse<>(transrecord);
     }
 }

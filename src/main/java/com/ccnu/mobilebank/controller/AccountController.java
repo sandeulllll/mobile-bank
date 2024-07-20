@@ -26,6 +26,7 @@ import java.util.Map;
  * @since 2024-07-16
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/accounts")
 public class AccountController {
 

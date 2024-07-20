@@ -17,4 +17,8 @@
         select personId from account where id = #{id}
     </select>
 
+    <select id="getAccountByAccountName" parameterType="java.lang.String" resultType="com.ccnu.mobilebank.pojo.Account">
+        select * from account where accountName = #{accountName}
+    </select>
+
 </mapper>
