@@ -20,6 +20,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         String token = requestAttributes.getRequest().getHeader("token");
 
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true; // 对于OPTIONS请求，不检查token
+        }
+
         if (token == null || token.isEmpty()) {
             throw new ConditionException("597", "Token is missing");
         }
