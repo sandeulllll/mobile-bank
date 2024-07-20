@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -43,7 +44,7 @@ public class Account implements Serializable {
     /**
      * 银行卡余额
      */
-    private Double balance;
+    private BigDecimal balance;
 
     /**
      * 银行卡状态

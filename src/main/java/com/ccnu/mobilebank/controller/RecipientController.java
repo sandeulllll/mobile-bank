@@ -36,7 +36,7 @@ public class RecipientController {
 
     // 获取联系人列表
     @GetMapping("/list")
-    public JsonResponse<List> getRecipientList() {
+    public JsonResponse<List<Recipient>> getRecipientList() {
         // 1. 根据登录用户的telId在recipient中查询联系人的列表
         Integer mobileId = userSupport.getCurrentMobileId();
 //        Integer mobileId = 16;
@@ -55,7 +55,7 @@ public class RecipientController {
 
     // 删除联系人
     @DeleteMapping("/delete/{id}")
-    public JsonResponse deleteRecipient(@PathVariable Integer id) {
+    public JsonResponse<String> deleteRecipient(@PathVariable Integer id) {
         recipientService.removeById(id);
         return JsonResponse.success();
     }

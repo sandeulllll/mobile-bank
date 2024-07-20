@@ -11,6 +11,7 @@ import com.ccnu.mobilebank.support.UserSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ public class AccountController {
 
     // 查询银行卡账户列表
     @GetMapping("/listBankAccount")
-    public JsonResponse<List> listBankAccount(){
+    public JsonResponse<List<Mobileaccount>> listBankAccount(){
         // 1. 获取登录用户的手机号id
         Integer mobileId = userSupport.getCurrentMobileId();
 //        Integer mobileId = 16;
@@ -91,7 +92,7 @@ public class AccountController {
 
     // 移除银行卡账户
     @RequestMapping("/removeBankAccount/{id}")
-    public JsonResponse removeBankAccount(@PathVariable Integer id){
+    public JsonResponse<String> removeBankAccount(@PathVariable Integer id){
         // 在mobileaccount中删除id=id的记录
         mobileaccountService.removeById(id);
         return JsonResponse.success();
@@ -99,7 +100,7 @@ public class AccountController {
 
     // 验证银行卡密码
     @RequestMapping("/verifyBankPassword")
-    public JsonResponse verifyBankPassword(@RequestParam String accountName, @RequestParam String password){
+    public JsonResponse<String> verifyBankPassword(@RequestParam String accountName, @RequestParam String password){
         QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("accountName",accountName);
         Account account = accountService.getOne(queryWrapper);
@@ -120,7 +121,7 @@ public class AccountController {
 
      // 查询总资产
      @RequestMapping("/queryTotalAssets")
-     public JsonResponse<Integer> queryTotalAssets(){
+     public JsonResponse<BigDecimal> queryTotalAssets(){
         Integer mobileId = userSupport.getCurrentMobileId();
 
         // 1. 在mobileaccount中查询所有的关联账户
@@ -136,12 +137,12 @@ public class AccountController {
         List<Account> accountList = accountService.listByIds(accountids);
 
         // 3. 在account中查询余额
-        Double totalAssets = 0.0;
+        BigDecimal totalAssets = new BigDecimal(0);
         for(Account account : accountList){
-            totalAssets += account.getBalance();
+            totalAssets.add(account.getBalance());
         }
 
-        return new JsonResponse(totalAssets);
+        return new JsonResponse<>(totalAssets);
      }
 
 }

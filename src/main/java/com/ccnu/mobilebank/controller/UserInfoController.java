@@ -10,7 +10,6 @@ import com.ccnu.mobilebank.service.IMobileService;
 import com.ccnu.mobilebank.service.IPersoninfoService;
 import com.ccnu.mobilebank.service.IUserInfoService;
 import com.ccnu.mobilebank.support.UserSupport;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,7 +57,7 @@ public class UserInfoController {
 
     // 修改头像
     @PostMapping("/avatar/update")
-    public JsonResponse updateAvatar(@RequestParam MultipartFile image, HttpServletRequest request) throws IOException {
+    public JsonResponse<String> updateAvatar(@RequestParam MultipartFile image) throws IOException {
         // 1. 获取原始文件名
         String originalFilename = image.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty())
@@ -66,7 +65,7 @@ public class UserInfoController {
 
         // 2. 构建新的文件名
         String extname = originalFilename.substring(originalFilename.lastIndexOf(".")); // 文件扩展名
-        String newFileName = UUID.randomUUID().toString() + extname; // 随机名+文件扩展名
+        String newFileName = UUID.randomUUID() + extname; // 随机名+文件扩展名
 
         // 3. 指定存储文件的目录
         String uploadDir = System.getProperty("user.dir") + "/files";
