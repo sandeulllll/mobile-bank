@@ -1,6 +1,7 @@
 package com.ccnu.mobilebank.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -48,4 +49,7 @@ public class Mobileaccount implements Serializable {
      * 逻辑删除（0 未删除、1 删除）
      */
     private Boolean isDelete;
+
+    @TableField(exist = false)
+    private Account account;
 }

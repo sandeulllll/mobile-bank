@@ -11,6 +11,7 @@ import com.ccnu.mobilebank.support.UserSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -128,9 +129,11 @@ public class AccountController {
         List<Account> accountList = accountService.listByIds(accountids);
 
         // 3. 在account中查询余额
-        Double totalAssets = 0.0;
+//        Double totalAssets = 0.0;
+         BigDecimal totalAssets = BigDecimal.valueOf(0);
         for(Account account : accountList){
-            totalAssets += account.getBalance();
+//            totalAssets += account.getBalance();
+            totalAssets.add(account.getBalance());
         }
 
         return new JsonResponse(totalAssets);
