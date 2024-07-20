@@ -8,7 +8,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Baomidou
@@ -29,4 +29,3 @@ public class Dicitem implements Serializable {
 
     private String dicItemName;
 }
-

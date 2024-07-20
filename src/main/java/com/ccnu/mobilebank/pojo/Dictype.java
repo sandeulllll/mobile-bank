@@ -27,4 +27,3 @@ public class Dictype implements Serializable {
 
     private String dicTypeName;
 }
-

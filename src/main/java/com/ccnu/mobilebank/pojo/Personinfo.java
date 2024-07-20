@@ -79,4 +79,3 @@ public class Personinfo implements Serializable {
     @TableField("isDelete")
     private Boolean isDelete;
 }
-

@@ -73,6 +73,7 @@ public class Transrecord implements Serializable {
     @TableField("isDelete")
     private Boolean isDelete;
 
+
     //冗余字段
     private String toPerson;
 }

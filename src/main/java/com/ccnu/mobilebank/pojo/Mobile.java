@@ -56,4 +56,3 @@ public class Mobile implements Serializable {
     @TableField("isDelete")
     private Boolean isDelete;
 }
-

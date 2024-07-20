@@ -3,14 +3,15 @@ package com.ccnu.mobilebank.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Baomidou
@@ -28,26 +29,32 @@ public class Mobileaccount implements Serializable {
     /**
      * 手机号
      */
+    @TableField("telId")
     private Integer telId;
 
     /**
      * 跟该手机号关联的账户
      */
+    @TableField("accountId")
     private Integer accountId;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    @TableField("createTime")
+    private String createTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    @TableField("updateTime")
+    private String updateTime;
 
     /**
      * 逻辑删除（0 未删除、1 删除）
      */
+    @TableLogic
+    @TableField("isDelete")
     private Boolean isDelete;
 
     @TableField(exist = false)
