@@ -36,14 +36,14 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     private PersoninfoMapper personinfoMapper;
 
     @Override
-    public List<BigDecimal> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end) {
-        List<BigDecimal> income = baseMapper.getPeriodIncome(accountId, start, end);
+    public List<Transrecord> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end) {
+        List<Transrecord> income = baseMapper.getPeriodIncome(accountId, start, end);
         return income;
     }
 
     @Override
-    public List<BigDecimal> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end) {
-        List<BigDecimal> outcome = baseMapper.getPeriodOutcome(accountId,start,end);
+    public List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end) {
+        List<Transrecord> outcome = baseMapper.getPeriodOutcome(accountId,start,end);
         return outcome;
     }
 
