@@ -79,7 +79,6 @@ public class RecipientController {
         Integer mobileId = userSupport.getCurrentMobileId();
         recipient.setTelId(mobileId);
         recipientService.save(recipient);
-
         return JsonResponse.success();
     }
 }
