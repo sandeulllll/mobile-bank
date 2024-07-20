@@ -38,7 +38,7 @@ public class AccountController {
 
     // 查询银行卡账户列表
     @GetMapping("/listBankAccount")
-    public JsonResponse<List> listBankAccount(){
+    public JsonResponse<List<Mobileaccount>> listBankAccount(){
         // 1. 获取登录用户的手机号id
         Integer mobileId = userSupport.getCurrentMobileId();
 //        Integer mobileId = 16;
@@ -60,18 +60,29 @@ public class AccountController {
     // 新增关联账户
     @PostMapping("/addRelatedAccount")
     public JsonResponse<String> addRelatedAccount(@RequestParam String accountName){
-        // 1. 获取用户的personId
+        // 1. 获取用户的personId，mobileId
         Integer personId = userSupport.getCurrentPersonId();
+        Integer mobileId = userSupport.getCurrentMobileId();
 //        Integer personId = 3;
         // 2. 在account表中查询对应的银行卡信息
         QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("accountName",accountName).eq("personId",personId);
         Account account = accountService.getOne(queryWrapper);
         if(account==null)
-            throw new ConditionException("银行卡号错误!");
+            throw new ConditionException("507","银行卡号错误!");
 
-        // 3. 存在，将信息加入mobileaccount表中
-        Integer mobileId = userSupport.getCurrentMobileId();
+        // 3. 在mobileaccount表中查询绑定该手机号的accountid
+        Map<String,Object> map = new HashMap<>();
+        map.put("telId",mobileId);
+        List<Mobileaccount> list = mobileaccountService.listByMap(map);
+
+        // 4. 判断该银行卡是否已经绑定
+        for(Mobileaccount mobileaccount : list){
+            if(mobileaccount.getAccountId().equals(account.getId()))
+                 throw new ConditionException("513","该银行卡已绑定!");
+        }
+
+        // 5. 未绑定，将信息加入mobileaccount表中
         Mobileaccount mobileaccount = new Mobileaccount();
         mobileaccount.setAccountId(account.getId());
         mobileaccount.setTelId(mobileId);
@@ -82,7 +93,7 @@ public class AccountController {
 
     // 移除银行卡账户
     @RequestMapping("/removeBankAccount/{id}")
-    public JsonResponse removeBankAccount(@PathVariable Integer id){
+    public JsonResponse<String> removeBankAccount(@PathVariable Integer id){
         // 在mobileaccount中删除id=id的记录
         mobileaccountService.removeById(id);
         return JsonResponse.success();
@@ -90,12 +101,12 @@ public class AccountController {
 
     // 验证银行卡密码
     @RequestMapping("/verifyBankPassword")
-    public JsonResponse verifyBankPassword(@RequestParam String accountName, @RequestParam String password){
+    public JsonResponse<String> verifyBankPassword(@RequestParam String accountName, @RequestParam String password){
         QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("accountName",accountName);
         Account account = accountService.getOne(queryWrapper);
         if(!account.getPassword().equals(password))
-            throw new ConditionException("密码错误!");
+            throw new ConditionException("510","支付密码错误!");
         return JsonResponse.success();
     }
 
@@ -106,14 +117,12 @@ public class AccountController {
         queryWrapper.eq("accountName",accountName);
         Account account = new Account();
         account.setPassword(password);
-        if(!accountService.update(account, queryWrapper))
-            throw new ConditionException("修改密码失败!");
         return JsonResponse.success();
     }
 
      // 查询总资产
      @RequestMapping("/queryTotalAssets")
-     public JsonResponse<Integer> queryTotalAssets(){
+     public JsonResponse<BigDecimal> queryTotalAssets(){
         Integer mobileId = userSupport.getCurrentMobileId();
 
         // 1. 在mobileaccount中查询所有的关联账户
@@ -129,14 +138,11 @@ public class AccountController {
         List<Account> accountList = accountService.listByIds(accountids);
 
         // 3. 在account中查询余额
-//        Double totalAssets = 0.0;
-         BigDecimal totalAssets = BigDecimal.valueOf(0);
+        BigDecimal totalAssets = new BigDecimal(0);
         for(Account account : accountList){
-//            totalAssets += account.getBalance();
-            totalAssets.add(account.getBalance());
+            totalAssets = totalAssets.add(account.getBalance());
         }
 
-        return new JsonResponse(totalAssets);
+        return new JsonResponse<>(totalAssets);
      }
-
 }
