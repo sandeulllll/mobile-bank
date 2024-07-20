@@ -16,7 +16,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns("/**"); // 根据需要调整拦截路径
+                .addPathPatterns("/**")
+                .excludePathPatterns("/users/user-tokens")
+                .excludePathPatterns("/users/get-code")
+                .excludePathPatterns("/users/verify-code")
+                .excludePathPatterns("/users/register");
     }
 }
 
