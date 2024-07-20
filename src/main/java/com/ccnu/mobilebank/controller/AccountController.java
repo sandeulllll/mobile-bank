@@ -139,10 +139,9 @@ public class AccountController {
         // 3. 在account中查询余额
         BigDecimal totalAssets = new BigDecimal(0);
         for(Account account : accountList){
-            totalAssets.add(account.getBalance());
+            totalAssets = totalAssets.add(account.getBalance());
         }
 
         return new JsonResponse<>(totalAssets);
      }
-
 }
