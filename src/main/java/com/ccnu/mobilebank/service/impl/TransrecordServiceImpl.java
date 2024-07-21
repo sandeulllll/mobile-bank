@@ -54,17 +54,26 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     public List<Transrecord> getTransrecordsByAccountId(Integer accountId, LocalDateTime start, LocalDateTime end,int page, int size) {
 //        分页查询
         int offset = (page - 1) * size;
-
+//        返回的结果
         List<Transrecord> transrecords = new ArrayList<>();
 
-//        只根据账户id查询
-        if(accountId != null && start == null && end == null){
-            transrecords =  baseMapper.getTransrecordsByAccountId(accountId, offset, size);
+//        accountId不为空时
+        if(accountId != null){
+            if(start == null && end == null){
+                transrecords =  baseMapper.getTransrecordsByAccountId(accountId, offset, size);
+            } else if(start != null && end != null){
+                transrecords = baseMapper.getTransrecordsByAccountIdAndTime(accountId,start,end,offset,size);
+            }
         }
-
-        //根据账户id和时间段查询
-        if(accountId != null && start != null && end != null){
-            transrecords = baseMapper.getTransrecordsByAccountIdAndTime(accountId,start,end,offset,size);
+//        accounId为空时
+        else if(accountId == null){
+            Integer userPersonId = userSupport.getCurrentPersonId();
+            List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
+            if(start == null && end == null){
+                transrecords = baseMapper.getTransrecordsByAccountIds(accountIds,offset,size);
+            } else if(start != null && end != null){
+                transrecords = baseMapper.getTransrecordsByAccountIdsAndTime(accountIds,start,end,offset,size);
+            }
         }
 
         for(Transrecord transrecord : transrecords){

@@ -16,6 +16,9 @@
     <select id="getPersonIdByAccountId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select personId from account where id = #{id}
     </select>
+    <select id="getAccountIdsByPersonId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select id from account where personId = #{userPersonId}
+    </select>
 
     <select id="getAccountByAccountName" parameterType="java.lang.String" resultType="com.ccnu.mobilebank.pojo.Account">
         select * from account where accountName = #{accountName}

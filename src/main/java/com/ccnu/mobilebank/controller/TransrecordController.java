@@ -48,9 +48,9 @@ public class TransrecordController {
     //根据账户id查询所有交易记录(已测试)
     @PostMapping("/all-records")
     public JsonResponse<List<Transrecord>> getTransrecords(
-            @RequestParam Integer accountId,
-            @RequestParam LocalDateTime start,
-            @RequestParam LocalDateTime end,
+            @RequestParam(required = false) Integer accountId,
+            @RequestParam(required = false) LocalDateTime start,
+            @RequestParam(required = false) LocalDateTime end,
             @RequestParam int page,
             @RequestParam int size) {
         List<Transrecord> allRecord =  transrecordService.getTransrecordsByAccountId(accountId,start,end, page, size);

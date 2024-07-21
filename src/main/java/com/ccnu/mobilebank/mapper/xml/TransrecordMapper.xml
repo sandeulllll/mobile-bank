@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ccnu.mobilebank.mapper.TransrecordMapper">
+<!--    获取收入记录-->
     <select id="getPeriodIncome" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         select
                money,updateTime
@@ -12,6 +13,7 @@
           and isDelete = 0
     </select>
 
+<!--    获取支出记录-->
     <select id="getPeriodOutcome" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         select
             money,updateTime
@@ -23,6 +25,7 @@
           and isDelete = 0
     </select>
 
+<!--    仅传入accountId时查询所有记录-->
     <select id="getTransrecordsByAccountId" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         SELECT *
         FROM transrecord
@@ -31,6 +34,8 @@
         ORDER BY updateTime DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
+
+<!--    传入accountId和时间段时分页查询所有记录-->
     <select id="getTransrecordsByAccountIdAndTime" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         select * from transrecord
         where (accountId = #{accountId} or otherId = #{accountId})
@@ -40,6 +45,41 @@
         limit #{size} offset #{offset}
     </select>
 
+<!--    accountId和时间段都不传入-->
+    <select id="getTransrecordsByAccountIds" resultType="com.ccnu.mobilebank.pojo.Transrecord">
+        SELECT *
+        FROM transrecord
+        WHERE (accountId IN
+        <foreach collection="accountIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        OR otherId IN
+        <foreach collection="accountIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>)
+        AND isDelete = 0
+        ORDER BY updateTime DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="getTransrecordsByAccountIdsAndTime" resultType="com.ccnu.mobilebank.pojo.Transrecord">
+        SELECT *
+        FROM transrecord
+        WHERE (accountId IN
+        <foreach collection="accountIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        OR otherId IN
+        <foreach collection="accountIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>)
+        AND isDelete = 0
+        AND updateTime BETWEEN #{start} AND #{end}
+        ORDER BY updateTime DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+<!--    转账功能调用这个-->
     <insert id="insertTransRecord" parameterType="com.ccnu.mobilebank.pojo.Transrecord">
         insert into
             transrecord(

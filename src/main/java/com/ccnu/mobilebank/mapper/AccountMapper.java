@@ -3,6 +3,8 @@ package com.ccnu.mobilebank.mapper;
 import com.ccnu.mobilebank.pojo.Account;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -20,5 +22,7 @@ public interface AccountMapper extends BaseMapper<Account> {
     Integer getPersonIdByAccountId(Integer id);
 
     Account getAccountByAccountName(String accountName);
+
+    List<Integer> getAccountIdsByPersonId(Integer userPersonId);
 }
 
