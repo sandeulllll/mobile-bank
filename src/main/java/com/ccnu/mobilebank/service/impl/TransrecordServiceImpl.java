@@ -51,22 +51,37 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     }
 
     @Override
-    public List<Transrecord> getTransrecordsByAccountId(Integer accountId, int page, int size) {
+    public List<Transrecord> getTransrecordsByAccountId(Integer accountId, LocalDateTime start, LocalDateTime end,int page, int size) {
 //        分页查询
         int offset = (page - 1) * size;
-//        得到该账户的交易记录
-        List<Transrecord> transrecords =  baseMapper.getTransrecordsByAccountId(accountId, offset, size);
+
+        List<Transrecord> transrecords = new ArrayList<>();
+
+//        查询某一账户id所有时间的交易记录
+        if(start == null && end == null){
+            transrecords =  baseMapper.getTransrecordsByAccountId(accountId, offset, size);
+        }
+
+        //TODO:其他情况
+
         for(Transrecord transrecord : transrecords){
+            //fromAccountId：支付的账户Id
             Integer fromAccountId = transrecord.getAccountId();
+            //toAccountId：收款的账户Id
             Integer toAccountId = transrecord.getOtherId();
             Integer personId;
+            String type;
+
             if(fromAccountId.equals(accountId)){
                 personId = accountMapper.getPersonIdByAccountId(toAccountId);
+                type = "支出";
             }else {
                 personId = accountMapper.getPersonIdByAccountId(fromAccountId);
+                type = "收入";
             }
             String personName = personinfoMapper.getPersonNameById(personId);
             transrecord.setToPerson(personName);
+            transrecord.setType(type);
         }
         return transrecords;
     }

@@ -21,7 +21,10 @@ public class TransrecordController {
 
     //根据账户id和时间段返回收入和支出概况（已测试）
     @PostMapping("/period-amounts")
-    public JsonResponse<List<Map<BigDecimal, LocalDateTime>>> getPeriodAmounts(@RequestParam Integer accountId, @RequestParam LocalDateTime start,@RequestParam LocalDateTime end){
+    public JsonResponse<List<Map<BigDecimal, LocalDateTime>>> getPeriodAmounts(
+            @RequestParam Integer accountId,
+            @RequestParam LocalDateTime start,
+            @RequestParam LocalDateTime end){
         List<Transrecord> income = transrecordService.getPeriodIncome(accountId,start,end);
         List<Transrecord> outcome = transrecordService.getPeriodOutcome(accountId,start,end);
         Map<BigDecimal,LocalDateTime> incomeList = new HashMap<>();
@@ -46,9 +49,11 @@ public class TransrecordController {
     @PostMapping("/all-records")
     public JsonResponse<List<Transrecord>> getTransrecords(
             @RequestParam Integer accountId,
+            @RequestParam LocalDateTime start,
+            @RequestParam LocalDateTime end,
             @RequestParam int page,
             @RequestParam int size) {
-        List<Transrecord> allRecord =  transrecordService.getTransrecordsByAccountId(accountId, page, size);
+        List<Transrecord> allRecord =  transrecordService.getTransrecordsByAccountId(accountId,start,end, page, size);
         return new JsonResponse<>(allRecord);
     }
 

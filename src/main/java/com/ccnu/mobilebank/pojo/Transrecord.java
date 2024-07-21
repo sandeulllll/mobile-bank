@@ -76,4 +76,7 @@ public class Transrecord implements Serializable {
 
     //冗余字段
     private String toPerson;
+
+    //冗余字段
+    private String type;
 }

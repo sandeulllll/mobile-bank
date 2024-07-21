@@ -20,7 +20,7 @@ public interface ITransrecordService extends IService<Transrecord> {
 
     List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end);
 
-    List<Transrecord> getTransrecordsByAccountId(Integer accountId, int page, int size);
+    List<Transrecord> getTransrecordsByAccountId(Integer accountId, LocalDateTime start,LocalDateTime end,int page, int size);
 
     Transrecord transferMoney(Integer fromAccountId,String toAccountName, String toPersonName,BigDecimal amount, String password);
 }
