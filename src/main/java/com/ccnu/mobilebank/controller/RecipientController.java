@@ -5,7 +5,6 @@ import com.ccnu.mobilebank.exception.ConditionException;
 import com.ccnu.mobilebank.pojo.JsonResponse;
 import com.ccnu.mobilebank.pojo.Personinfo;
 import com.ccnu.mobilebank.pojo.Recipient;
-import com.ccnu.mobilebank.service.IMobileService;
 import com.ccnu.mobilebank.service.IPersoninfoService;
 import com.ccnu.mobilebank.service.IRecipientService;
 import com.ccnu.mobilebank.support.UserSupport;
@@ -30,8 +29,6 @@ public class RecipientController {
     @Autowired
     private IRecipientService recipientService;
     @Autowired
-    private IMobileService mobileService;
-    @Autowired
     private IPersoninfoService personinfoService;
 
     @Autowired
@@ -39,7 +36,7 @@ public class RecipientController {
 
     // 获取联系人列表
     @GetMapping("/list")
-    public JsonResponse<List> getRecipientList() {
+    public JsonResponse<List<Recipient>> getRecipientList() {
         // 1. 根据登录用户的telId在recipient中查询联系人的列表
         Integer mobileId = userSupport.getCurrentMobileId();
 //        Integer mobileId = 16;
@@ -58,7 +55,7 @@ public class RecipientController {
 
     // 删除联系人
     @DeleteMapping("/delete/{id}")
-    public JsonResponse deleteRecipient(@PathVariable Integer id) {
+    public JsonResponse<String> deleteRecipient(@PathVariable Integer id) {
         recipientService.removeById(id);
         return JsonResponse.success();
     }
@@ -71,12 +68,23 @@ public class RecipientController {
         queryWrapper.eq("telephone",telephone).eq("realname",name);
         Personinfo personinfo = personinfoService.getOne(queryWrapper);
         if(personinfo == null)
-            throw new ConditionException("用户不存在!");
+            throw new ConditionException("512","用户不存在!");
 
-        // 2. 存在，将其加入recipient
+        // 2. 根据登录用户的telId在recipient中查询联系人的列表
+        Integer mobileId = userSupport.getCurrentMobileId();
+        Map<String,Object> map = new HashMap<>();
+        map.put("telId",mobileId);
+        List<Recipient> list = recipientService.listByMap(map);
+
+        // 3. 判断该联系人是否已经存在
+        for (Recipient recipients:list){
+            if(recipients.getOtherId().equals(personinfo.getId()))
+                throw new ConditionException("514","联系人已存在!");
+        }
+
+        // 4. 不存在，将其加入recipient
         Recipient recipient = new Recipient();
         recipient.setOtherId(personinfo.getId());
-        Integer mobileId = userSupport.getCurrentMobileId();
         recipient.setTelId(mobileId);
         recipientService.save(recipient);
         return JsonResponse.success();
