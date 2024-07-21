@@ -11,6 +11,8 @@
               otherId = #{accountId}
           and updateTime between #{start} and #{end}
           and isDelete = 0
+        ORDER BY updateTime DESC
+        LIMIT #{size} OFFSET #{offset}
     </select>
 
 <!--    根据accountId获取支出记录-->
@@ -23,9 +25,50 @@
             accountId = #{accountId}
           and updateTime between #{start} and #{end}
           and isDelete = 0
+        ORDER BY updateTime DESC
+        LIMIT #{size} OFFSET #{offset}
     </select>
 
-<!--    传入的accountId为空时获取所有名下账户的收入记录-->
+    <select id="getTotalIncomeByAccountIdAndTime" resultType="long">
+        SELECT COUNT(*)
+        FROM transrecord
+        WHERE (accountId = #{accountId} OR otherId = #{accountId})
+          AND isDelete = 0
+          AND updateTime >= #{start}
+          AND updateTime &lt;= #{end}
+    </select>
+
+    <select id="getTotalIncomeByAccountIdsAndTime" resultType="long">
+        SELECT COUNT(*)
+        FROM transrecord
+        WHERE (accountId IN (<foreach collection="accountIds" item="id" separator=",">#{id}</foreach>)
+        OR otherId IN (<foreach collection="accountIds" item="id" separator=",">#{id}</foreach>))
+        AND isDelete = 0
+        AND updateTime >= #{start}
+        AND updateTime &lt;= #{end}
+    </select>
+
+    <select id="getTotalOutcomeByAccountIdAndTime" resultType="long">
+        SELECT COUNT(*)
+        FROM transrecord
+        WHERE (accountId = #{accountId} OR otherId = #{accountId})
+          AND isDelete = 0
+          AND updateTime >= #{start}
+          AND updateTime &lt;= #{end}
+    </select>
+
+    <select id="getTotalOutcomeByAccountIdsAndTime" resultType="long">
+        SELECT COUNT(*)
+        FROM transrecord
+        WHERE (accountId IN (<foreach collection="accountIds" item="id" separator=",">#{id}</foreach>)
+        OR otherId IN (<foreach collection="accountIds" item="id" separator=",">#{id}</foreach>))
+        AND isDelete = 0
+        AND updateTime >= #{start}
+        AND updateTime &lt;= #{end}
+    </select>
+
+
+    <!--    传入的accountId为空时获取所有名下账户的收入记录-->
     <select id="getPeriodIncomeByAccountIds" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         select * from transrecord
         where (otherId IN

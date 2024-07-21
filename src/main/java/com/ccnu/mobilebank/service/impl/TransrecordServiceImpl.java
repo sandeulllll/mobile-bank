@@ -3,6 +3,7 @@ package com.ccnu.mobilebank.service.impl;
 import com.ccnu.mobilebank.mapper.AccountMapper;
 import com.ccnu.mobilebank.mapper.PersoninfoMapper;
 import com.ccnu.mobilebank.pojo.Account;
+import com.ccnu.mobilebank.pojo.PagedResponse;
 import com.ccnu.mobilebank.pojo.Personinfo;
 import com.ccnu.mobilebank.pojo.Transrecord;
 import com.ccnu.mobilebank.mapper.TransrecordMapper;
@@ -39,32 +40,38 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     private PersoninfoMapper personinfoMapper;
 
     @Override
-    public List<Transrecord> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size) {
+    public PagedResponse<List<Transrecord>> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end, int page, int size) {
+        int offset = (page - 1) * size;
+        List<Transrecord> income;
+        long total;
         if(accountId != null){
-            List<Transrecord> income = baseMapper.getPeriodIncome(accountId, start, end);
-            return income;
+            income = baseMapper.getPeriodIncome(accountId, start, end,offset,size);
+            total = baseMapper.getTotalIncomeByAccountIdAndTime(accountId, start, end);
         } else{
             Integer userPersonId = userSupport.getCurrentPersonId();
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
-            int offset = (page - 1) * size;
-            List<Transrecord> income = baseMapper.getPeriodIncomeByAccountIds(accountIds,start,end,offset,size);
-            return income;
+            income = baseMapper.getPeriodIncomeByAccountIds(accountIds,start,end,offset,size);
+            total = baseMapper.getTotalIncomeByAccountIdsAndTime(accountIds, start, end);
         }
+        return new PagedResponse<>(income, total);
     }
 
     @Override
-    public List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size) {
+    public PagedResponse<List<Transrecord>> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size) {
         List<Transrecord> outcome;
-        if(accountId != null){
-           outcome = baseMapper.getPeriodOutcome(accountId,start,end);
+        long total;
+        int offset = (page - 1) * size;
 
+        if(accountId != null){
+           outcome = baseMapper.getPeriodOutcome(accountId,start,end,offset,size);
+           total = baseMapper.getTotalOutcomeByAccountIdAndTime(accountId, start, end);
         }else {
             Integer userPersonId = userSupport.getCurrentPersonId();
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
-            int offset = (page - 1) * size;
             outcome = baseMapper.getPeriodOutcomeByAccountIds(accountIds,start,end,offset,size);
+            total = baseMapper.getTotalOutcomeByAccountIdsAndTime(accountIds, start, end);
         }
-        return outcome;
+        return new PagedResponse<>(outcome, total);
     }
 
     @Override
@@ -120,6 +127,7 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
         return transrecords;
     }
 
+    //转账
     @Override
     public Transrecord transferMoney(Integer fromAccountId,String toAccountName,String toPersonName, BigDecimal amount, String password) {
         //验证本账户是否被冻结
@@ -175,6 +183,7 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
         return transrecord;
     }
 
+    //获取所有交易记录的获取total方法
     @Override
     public long getTotalCountByAccountId(Integer accountId, LocalDateTime start, LocalDateTime end) {
         if (accountId != null) {
@@ -194,6 +203,5 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
         }
         return 0;
     }
-
 
 }

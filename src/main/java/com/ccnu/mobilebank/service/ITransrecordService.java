@@ -1,5 +1,6 @@
 package com.ccnu.mobilebank.service;
 
+import com.ccnu.mobilebank.pojo.PagedResponse;
 import com.ccnu.mobilebank.pojo.Transrecord;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,9 +17,9 @@ import java.util.List;
  * @since 2024-07-16
  */
 public interface ITransrecordService extends IService<Transrecord> {
-    List<Transrecord> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size);
+    PagedResponse<List<Transrecord>> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end, int page, int size);
 
-    List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size);
+    PagedResponse<List<Transrecord>> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size);
 
     List<Transrecord> getTransrecordsByAccountId(Integer accountId, LocalDateTime start,LocalDateTime end,int page, int size);
 

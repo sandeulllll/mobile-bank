@@ -3,19 +3,19 @@ package com.ccnu.mobilebank.pojo;
 import java.util.List;
 
 public class PagedResponse<T> {
-    private List<T> data;
+    private T data;
     private long total;
 
-    public PagedResponse(List<T> data, long total) {
+    public PagedResponse(T data, long total) {
         this.data = data;
         this.total = total;
     }
 
-    public List<T> getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(List<T> data) {
+    public void setData(T data) {
         this.data = data;
     }
 
