@@ -22,11 +22,14 @@ public class TransrecordController {
     //根据账户id和时间段返回收入和支出概况（已测试）
     @PostMapping("/period-amounts")
     public JsonResponse<List<Map<BigDecimal, LocalDateTime>>> getPeriodAmounts(
-            @RequestParam Integer accountId,
+            @RequestParam(required = false) Integer accountId,
             @RequestParam LocalDateTime start,
-            @RequestParam LocalDateTime end){
-        List<Transrecord> income = transrecordService.getPeriodIncome(accountId,start,end);
-        List<Transrecord> outcome = transrecordService.getPeriodOutcome(accountId,start,end);
+            @RequestParam LocalDateTime end,
+            @RequestParam int page,
+            @RequestParam int size){
+        List<Transrecord> income = transrecordService.getPeriodIncome(accountId,start,end,page,size);
+        List<Transrecord> outcome = transrecordService.getPeriodOutcome(accountId,start,end,page,size);
+
         Map<BigDecimal,LocalDateTime> incomeList = new HashMap<>();
         Map<BigDecimal,LocalDateTime> outcomeList = new HashMap<>();
         for(Transrecord transrecord : income){
@@ -39,13 +42,10 @@ public class TransrecordController {
         periodAmounts.add(incomeList);
         periodAmounts.add(outcomeList);
         return new JsonResponse<>(periodAmounts);
-        /*List<List<Transrecord>> periodAmounts = new ArrayList<>();
-        periodAmounts.add(income);
-        periodAmounts.add(outcome);
-        return new JsonResponse<>(periodAmounts);*/
     }
 
     //根据账户id查询所有交易记录(已测试)
+    //TODO:还要加上自己的卡号和
     @PostMapping("/all-records")
     public JsonResponse<List<Transrecord>> getTransrecords(
             @RequestParam(required = false) Integer accountId,

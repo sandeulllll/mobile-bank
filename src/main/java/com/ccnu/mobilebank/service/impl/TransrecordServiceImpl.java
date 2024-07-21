@@ -39,14 +39,31 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     private PersoninfoMapper personinfoMapper;
 
     @Override
-    public List<Transrecord> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end) {
-        List<Transrecord> income = baseMapper.getPeriodIncome(accountId, start, end);
-        return income;
+    public List<Transrecord> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size) {
+        if(accountId != null){
+            List<Transrecord> income = baseMapper.getPeriodIncome(accountId, start, end);
+            return income;
+        } else{
+            Integer userPersonId = userSupport.getCurrentPersonId();
+            List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
+            int offset = (page - 1) * size;
+            List<Transrecord> income = baseMapper.getPeriodIncomeByAccountIds(accountIds,start,end,offset,size);
+            return income;
+        }
     }
 
     @Override
-    public List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end) {
-        List<Transrecord> outcome = baseMapper.getPeriodOutcome(accountId,start,end);
+    public List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size) {
+        List<Transrecord> outcome;
+        if(accountId != null){
+           outcome = baseMapper.getPeriodOutcome(accountId,start,end);
+
+        }else {
+            Integer userPersonId = userSupport.getCurrentPersonId();
+            List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
+            int offset = (page - 1) * size;
+            outcome = baseMapper.getPeriodOutcomeByAccountIds(accountIds,start,end,offset,size);
+        }
         return outcome;
     }
 

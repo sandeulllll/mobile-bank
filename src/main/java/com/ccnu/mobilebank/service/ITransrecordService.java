@@ -16,9 +16,9 @@ import java.util.List;
  * @since 2024-07-16
  */
 public interface ITransrecordService extends IService<Transrecord> {
-    List<Transrecord> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end);
+    List<Transrecord> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size);
 
-    List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end);
+    List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size);
 
     List<Transrecord> getTransrecordsByAccountId(Integer accountId, LocalDateTime start,LocalDateTime end,int page, int size);
 

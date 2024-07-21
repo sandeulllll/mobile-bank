@@ -70,6 +70,7 @@
         LIMIT #{size} OFFSET #{offset}
     </select>
 
+<!--    仅传入时间时查询所有记录-->
     <select id="getTransrecordsByAccountIdsAndTime" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         SELECT *
         FROM transrecord
@@ -82,6 +83,28 @@
             #{id}
         </foreach>)
         AND isDelete = 0
+        AND updateTime BETWEEN #{start} AND #{end}
+        ORDER BY updateTime DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+    <select id="getPeriodIncomeByAccountIds" resultType="com.ccnu.mobilebank.pojo.Transrecord">
+        select * from transrecord
+        where (otherId IN
+            <foreach collection="accountIds" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>)
+            and isDelete = 0
+            AND updateTime BETWEEN #{start} AND #{end}
+            ORDER BY updateTime DESC
+            LIMIT #{size} OFFSET #{offset}
+    </select>
+    <select id="getPeriodOutcomeByAccountIds" resultType="com.ccnu.mobilebank.pojo.Transrecord">
+        select * from transrecord
+        where (accountId IN
+        <foreach collection="accountIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>)
+        and isDelete = 0
         AND updateTime BETWEEN #{start} AND #{end}
         ORDER BY updateTime DESC
         LIMIT #{size} OFFSET #{offset}

@@ -47,5 +47,20 @@ public interface TransrecordMapper extends BaseMapper<Transrecord> {
             @Param("end") LocalDateTime end,
             @Param("offset") int offset,
             @Param("size") int size);
+
+
+    List<Transrecord> getPeriodIncomeByAccountIds(
+            @Param("accountIds") List<Integer> accountIds,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            @Param("offset") int offset,
+            @Param("size") int size);
+
+    List<Transrecord> getPeriodOutcomeByAccountIds(
+            @Param("accountIds") List<Integer> accountIds,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            @Param("offset") int offset,
+            @Param("size") int size);
 }
 
