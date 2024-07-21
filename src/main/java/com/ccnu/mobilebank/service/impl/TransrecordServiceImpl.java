@@ -72,14 +72,22 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     }
 
     @Override
-    public Transrecord transferMoney(Integer fromAccountId,String toAccountName, BigDecimal amount, String password) {
+    public Transrecord transferMoney(Integer fromAccountId,String toAccountName,String toPersonName, BigDecimal amount, String password) {
+        //验证本账户是否被冻结
         Account fromAccount = accountMapper.getAccountById(fromAccountId);
         if(fromAccount.getStatusId() == 0){
             throw new ConditionException("508","本账户已被冻结!");
         }
 
-        //验证收款账户是否被冻结
+        //验证输入账户名和联系人的姓名是否匹配
         Account toAccount = accountMapper.getAccountByAccountName(toAccountName);
+        Integer dbPersonId = toAccount.getPersonId();
+        String dbRealName = personinfoMapper.getPersonNameById(dbPersonId);
+        if(!dbRealName.equals(toPersonName)){
+            throw new ConditionException("507","账户名和联系人不匹配,请重新输入账户名!");
+        }
+
+        //验证收款账户是否被冻结
         if(toAccount.getStatusId() == 0){
             throw new ConditionException("509","收款账户已被冻结!");
         }

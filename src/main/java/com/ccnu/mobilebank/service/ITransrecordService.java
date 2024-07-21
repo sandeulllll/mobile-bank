@@ -22,5 +22,5 @@ public interface ITransrecordService extends IService<Transrecord> {
 
     List<Transrecord> getTransrecordsByAccountId(Integer accountId, int page, int size);
 
-    Transrecord transferMoney(Integer fromAccountId,String toAccountName, BigDecimal amount, String password);
+    Transrecord transferMoney(Integer fromAccountId,String toAccountName, String toPersonName,BigDecimal amount, String password);
 }

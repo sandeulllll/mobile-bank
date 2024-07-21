@@ -57,9 +57,10 @@ public class TransrecordController {
     public JsonResponse<Transrecord> transferMoney(
             @RequestParam Integer fromAccountId,
             @RequestParam String toAccountName,
+            @RequestParam String toPersonName,
             @RequestParam BigDecimal amount,
             @RequestParam String password) {
-        Transrecord transrecord = transrecordService.transferMoney(fromAccountId,toAccountName, amount, password);
+        Transrecord transrecord = transrecordService.transferMoney(fromAccountId,toAccountName, toPersonName,amount, password);
         return new JsonResponse<>(transrecord);
     }
 }
