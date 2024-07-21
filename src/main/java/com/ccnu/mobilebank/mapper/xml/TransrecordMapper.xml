@@ -34,6 +34,14 @@
         ORDER BY updateTime DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
+    <select id="getTransrecordsByAccountIdAndTime" resultType="com.ccnu.mobilebank.pojo.Transrecord">
+        select * from transrecord
+        where (accountId = #{accountId} or otherId = #{accountId})
+            and updateTime between #{start} and #{end}
+            and isDelete = 0
+        order by updateTime desc
+        limit #{size} offset #{offset}
+    </select>
 
 <!--    传入accountId和时间段时分页查询所有记录-->
     <select id="getTransrecordsByAccountIdAndTime" resultType="com.ccnu.mobilebank.pojo.Transrecord">
