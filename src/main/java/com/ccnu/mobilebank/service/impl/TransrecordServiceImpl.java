@@ -83,17 +83,22 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
             Integer toAccountId = transrecord.getOtherId();
             Integer personId;
             String type;
+            String accountName;
 
             if(fromAccountId.equals(accountId)){
                 personId = accountMapper.getPersonIdByAccountId(toAccountId);
                 type = "支出";
+                accountName = accountMapper.getAccountNameById(toAccountId);
             }else {
                 personId = accountMapper.getPersonIdByAccountId(fromAccountId);
                 type = "收入";
+                accountName = accountMapper.getAccountNameById(fromAccountId);
             }
             String personName = personinfoMapper.getPersonNameById(personId);
             transrecord.setToPerson(personName);
             transrecord.setType(type);
+            //TODO:设置冗余字段accountName
+            transrecord.setAccountName(accountName);
         }
         return transrecords;
     }

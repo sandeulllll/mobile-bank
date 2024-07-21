@@ -24,4 +24,8 @@
         select * from account where accountName = #{accountName}
     </select>
 
+    <select id="getAccountNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select accountName from account where id = #{accountId}
+    </select>
+
 </mapper>

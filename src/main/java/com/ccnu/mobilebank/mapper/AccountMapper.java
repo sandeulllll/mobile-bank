@@ -24,5 +24,7 @@ public interface AccountMapper extends BaseMapper<Account> {
     Account getAccountByAccountName(String accountName);
 
     List<Integer> getAccountIdsByPersonId(Integer userPersonId);
+
+    String getAccountNameById(Integer accountId);
 }
 
