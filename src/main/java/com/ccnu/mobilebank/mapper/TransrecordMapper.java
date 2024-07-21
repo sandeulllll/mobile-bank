@@ -28,5 +28,12 @@ public interface TransrecordMapper extends BaseMapper<Transrecord> {
     List<Transrecord> getTransrecordsByAccountId(Integer accountId, int offset, int size);
 
     void insertTransRecord(Transrecord transrecord);
+
+    List<Transrecord> getTransrecordsByAccountIdAndTime(
+            @Param("accountId") Integer accountId,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            @Param("offset") int offset,
+            @Param("size") int size);
 }
 

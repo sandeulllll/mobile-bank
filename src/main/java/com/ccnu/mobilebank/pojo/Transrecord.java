@@ -79,4 +79,6 @@ public class Transrecord implements Serializable {
 
     //冗余字段
     private String type;
+    //冗余字段
+    private String accountName;
 }

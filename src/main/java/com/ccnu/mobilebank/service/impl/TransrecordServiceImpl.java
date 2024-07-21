@@ -57,12 +57,15 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
 
         List<Transrecord> transrecords = new ArrayList<>();
 
-//        查询某一账户id所有时间的交易记录
-        if(start == null && end == null){
+//        只根据账户id查询
+        if(accountId != null && start == null && end == null){
             transrecords =  baseMapper.getTransrecordsByAccountId(accountId, offset, size);
         }
 
-        //TODO:其他情况
+        //根据账户id和时间段查询
+        if(accountId != null && start != null && end != null){
+            transrecords = baseMapper.getTransrecordsByAccountIdAndTime(accountId,start,end,offset,size);
+        }
 
         for(Transrecord transrecord : transrecords){
             //fromAccountId：支付的账户Id
