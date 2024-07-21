@@ -62,5 +62,13 @@ public interface TransrecordMapper extends BaseMapper<Transrecord> {
             @Param("end") LocalDateTime end,
             @Param("offset") int offset,
             @Param("size") int size);
+
+    long getTotalCountByAccountId(Integer accountId);
+
+    long getTotalCountByAccountIdAndTime(Integer accountId, LocalDateTime start, LocalDateTime end);
+
+    long getTotalCountByAccountIds(List<Integer> accountIds);
+
+    long getTotalCountByAccountIdsAndTime(List<Integer> accountIds, LocalDateTime start, LocalDateTime end);
 }
 

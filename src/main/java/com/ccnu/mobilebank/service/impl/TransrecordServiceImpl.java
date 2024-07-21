@@ -174,4 +174,26 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
         baseMapper.insertTransRecord(transrecord);
         return transrecord;
     }
+
+    @Override
+    public long getTotalCountByAccountId(Integer accountId, LocalDateTime start, LocalDateTime end) {
+        if (accountId != null) {
+            if (start == null && end == null) {
+                return baseMapper.getTotalCountByAccountId(accountId);
+            } else if (start != null && end != null) {
+                return baseMapper.getTotalCountByAccountIdAndTime(accountId, start, end);
+            }
+        } else {
+            Integer userPersonId = userSupport.getCurrentPersonId();
+            List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
+            if (start == null && end == null) {
+                return baseMapper.getTotalCountByAccountIds(accountIds);
+            } else if (start != null && end != null) {
+                return baseMapper.getTotalCountByAccountIdsAndTime(accountIds, start, end);
+            }
+        }
+        return 0;
+    }
+
+
 }

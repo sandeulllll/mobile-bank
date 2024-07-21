@@ -23,4 +23,6 @@ public interface ITransrecordService extends IService<Transrecord> {
     List<Transrecord> getTransrecordsByAccountId(Integer accountId, LocalDateTime start,LocalDateTime end,int page, int size);
 
     Transrecord transferMoney(Integer fromAccountId,String toAccountName, String toPersonName,BigDecimal amount, String password);
+
+    long getTotalCountByAccountId(Integer accountId, LocalDateTime start, LocalDateTime end);
 }

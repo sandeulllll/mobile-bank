@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ccnu.mobilebank.mapper.TransrecordMapper">
-<!--    获取收入记录-->
+<!--    根据accountId获取收入记录-->
     <select id="getPeriodIncome" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         select
                money,updateTime
@@ -13,7 +13,7 @@
           and isDelete = 0
     </select>
 
-<!--    获取支出记录-->
+<!--    根据accountId获取支出记录-->
     <select id="getPeriodOutcome" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         select
             money,updateTime
@@ -25,7 +25,68 @@
           and isDelete = 0
     </select>
 
-<!--    仅传入accountId时查询所有记录-->
+<!--    传入的accountId为空时获取所有名下账户的收入记录-->
+    <select id="getPeriodIncomeByAccountIds" resultType="com.ccnu.mobilebank.pojo.Transrecord">
+        select * from transrecord
+        where (otherId IN
+        <foreach collection="accountIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>)
+        and isDelete = 0
+        AND updateTime BETWEEN #{start} AND #{end}
+        ORDER BY updateTime DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+<!--    传入的accountId为空时获取名下所有账户的收入记录-->
+    <select id="getPeriodOutcomeByAccountIds" resultType="com.ccnu.mobilebank.pojo.Transrecord">
+        select * from transrecord
+        where (accountId IN
+        <foreach collection="accountIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>)
+        and isDelete = 0
+        AND updateTime BETWEEN #{start} AND #{end}
+        ORDER BY updateTime DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="getTotalCountByAccountId" resultType="long">
+        SELECT COUNT(*)
+        FROM transrecord
+        WHERE (accountId = #{accountId} OR otherId = #{accountId})
+          AND isDelete = 0
+    </select>
+
+    <select id="getTotalCountByAccountIdAndTime" resultType="long">
+        SELECT COUNT(*)
+        FROM transrecord
+        WHERE (accountId = #{accountId} OR otherId = #{accountId})
+          AND isDelete = 0
+          AND updateTime >= #{start}
+          AND updateTime &lt;= #{end}
+    </select>
+
+    <select id="getTotalCountByAccountIds" resultType="long">
+        SELECT COUNT(*)
+        FROM transrecord
+        WHERE (accountId IN (<foreach collection="accountIds" item="id" separator=",">#{id}</foreach>)
+        OR otherId IN (<foreach collection="accountIds" item="id" separator=",">#{id}</foreach>))
+        AND isDelete = 0
+    </select>
+
+    <select id="getTotalCountByAccountIdsAndTime" resultType="long">
+        SELECT COUNT(*)
+        FROM transrecord
+        WHERE (accountId IN (<foreach collection="accountIds" item="id" separator=",">#{id}</foreach>)
+        OR otherId IN (<foreach collection="accountIds" item="id" separator=",">#{id}</foreach>))
+        AND isDelete = 0
+        AND updateTime >= #{start}
+        AND updateTime &lt;= #{end}
+    </select>
+
+
+    <!--    仅传入accountId时查询所有交易记录-->
     <select id="getTransrecordsByAccountId" resultType="com.ccnu.mobilebank.pojo.Transrecord">
         SELECT *
         FROM transrecord
@@ -87,28 +148,8 @@
         ORDER BY updateTime DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
-    <select id="getPeriodIncomeByAccountIds" resultType="com.ccnu.mobilebank.pojo.Transrecord">
-        select * from transrecord
-        where (otherId IN
-            <foreach collection="accountIds" item="id" open="(" separator="," close=")">
-                #{id}
-            </foreach>)
-            and isDelete = 0
-            AND updateTime BETWEEN #{start} AND #{end}
-            ORDER BY updateTime DESC
-            LIMIT #{size} OFFSET #{offset}
-    </select>
-    <select id="getPeriodOutcomeByAccountIds" resultType="com.ccnu.mobilebank.pojo.Transrecord">
-        select * from transrecord
-        where (accountId IN
-        <foreach collection="accountIds" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>)
-        and isDelete = 0
-        AND updateTime BETWEEN #{start} AND #{end}
-        ORDER BY updateTime DESC
-        LIMIT #{size} OFFSET #{offset}
-    </select>
+
+
 
 <!--    转账功能调用这个-->
     <insert id="insertTransRecord" parameterType="com.ccnu.mobilebank.pojo.Transrecord">

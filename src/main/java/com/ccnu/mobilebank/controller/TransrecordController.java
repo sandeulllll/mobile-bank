@@ -1,6 +1,7 @@
 package com.ccnu.mobilebank.controller;
 
 import com.ccnu.mobilebank.pojo.JsonResponse;
+import com.ccnu.mobilebank.pojo.PagedResponse;
 import com.ccnu.mobilebank.pojo.Transrecord;
 import com.ccnu.mobilebank.service.ITransrecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +46,18 @@ public class TransrecordController {
     }
 
     //根据账户id查询所有交易记录(已测试)
-    //TODO:还要加上自己的卡号和
+    //TODO:返回数据总条数
     @PostMapping("/all-records")
-    public JsonResponse<List<Transrecord>> getTransrecords(
+    public JsonResponse<PagedResponse<Transrecord>> getTransrecords(
             @RequestParam(required = false) Integer accountId,
             @RequestParam(required = false) LocalDateTime start,
             @RequestParam(required = false) LocalDateTime end,
             @RequestParam int page,
             @RequestParam int size) {
         List<Transrecord> allRecord =  transrecordService.getTransrecordsByAccountId(accountId,start,end, page, size);
-        return new JsonResponse<>(allRecord);
+        long total = transrecordService.getTotalCountByAccountId(accountId, start, end);
+        PagedResponse<Transrecord> response = new PagedResponse<>(allRecord,total);
+        return new JsonResponse<>(response);
     }
 
     //转账接口(已测试)
