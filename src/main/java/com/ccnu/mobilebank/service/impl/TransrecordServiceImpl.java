@@ -199,6 +199,11 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
         transrecord.setTransDate(LocalDateTime.now().toString());
         transrecord.setTranstypeId(2);
         transrecord.setIsDelete(false);
+        transrecord.setToPerson(dbRealName);
+        //TODO：收入类型：
+        transrecord.setType("支出");
+        transrecord.setToAccountName(toAccountName);
+        transrecord.setMyAccountName(fromAccount.getAccountName());
         baseMapper.insertTransRecord(transrecord);
         return transrecord;
     }
