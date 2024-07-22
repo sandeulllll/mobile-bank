@@ -18,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -122,25 +124,33 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
             } else if(start != null && end != null){
                 transrecords = baseMapper.getTransrecordsByAccountIdsAndTime(accountIds,start,end,offset,size);
             }
+            Set<Integer> myAccounts = new HashSet<>();
+            for(Integer id : accountIds){
+                myAccounts.add(id);
+            }
             for (Transrecord transrecord : transrecords){
-                for(Integer id : accountIds){
-                    if(id.equals(transrecord.getAccountId())){
-                        Integer toPersonId = accountMapper.getPersonIdByAccountId(transrecord.getOtherId());
-                        String toAccountName = accountMapper.getAccountNameById(transrecord.getOtherId());
-                        String toPersonName = personinfoMapper.getPersonNameById(toPersonId);
-                        transrecord.setToPerson(toPersonName);
-                        transrecord.setType("支出");
-                        transrecord.setMyAccountName(accountMapper.getAccountNameById(id));
-                        transrecord.setToAccountName(toAccountName);
-                    }else {
-                        Integer toPersonId = accountMapper.getPersonIdByAccountId(transrecord.getAccountId());
-                        String toAccountName = accountMapper.getAccountNameById(transrecord.getAccountId());
-                        String toPersonName = personinfoMapper.getPersonNameById(toPersonId);
-                        transrecord.setToPerson(toPersonName);
-                        transrecord.setType("收入");
-                        transrecord.setMyAccountName(accountMapper.getAccountNameById(id));
-                        transrecord.setToAccountName(toAccountName);
-                    }
+                int fromAccountId = transrecord.getAccountId();
+                if(myAccounts.contains(fromAccountId)){
+                    //我支出
+                    transrecord.setType("支出");
+                    Integer otherId = transrecord.getOtherId();
+                    Integer toPersonId = accountMapper.getPersonIdByAccountId(otherId);
+                    String toPersonName = personinfoMapper.getPersonNameById(toPersonId);
+                    transrecord.setToPerson(toPersonName);
+                    String myAccountName = accountMapper.getAccountNameById(fromAccountId);
+                    transrecord.setMyAccountName(myAccountName);
+                    String toAccountName = accountMapper.getAccountNameById(otherId);
+                    transrecord.setToAccountName(toAccountName);
+                } else{
+                    transrecord.setType("收入");
+                    Integer otherId = transrecord.getAccountId();
+                    Integer toPersonId = accountMapper.getPersonIdByAccountId(otherId);
+                    String toPersonName = personinfoMapper.getPersonNameById(toPersonId);
+                    transrecord.setToPerson(toPersonName);
+                    String myAccountName = accountMapper.getAccountNameById(transrecord.getOtherId());
+                    transrecord.setMyAccountName(myAccountName);
+                    String toAccountName = accountMapper.getAccountNameById(otherId);
+                    transrecord.setToAccountName(toAccountName);
                 }
             }
         }
