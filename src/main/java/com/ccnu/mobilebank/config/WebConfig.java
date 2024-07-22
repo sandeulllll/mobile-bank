@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/users/get-code")
                 .excludePathPatterns("/users/verify-code")
                 .excludePathPatterns("/users/register")
-                .excludePathPatterns("/users/login");
+                .excludePathPatterns("/users/password");
     }
     @Override
     public void addCorsMappings(CorsRegistry registry) {
