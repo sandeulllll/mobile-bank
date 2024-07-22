@@ -74,6 +74,7 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
         return new PagedResponse<>(outcome, total);
     }
 
+    //获取交易记录
     @Override
     public List<Transrecord> getTransrecordsByAccountId(Integer accountId, LocalDateTime start, LocalDateTime end,int page, int size) {
 //        分页查询
@@ -88,6 +89,31 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
             } else if(start != null && end != null){
                 transrecords = baseMapper.getTransrecordsByAccountIdAndTime(accountId,start,end,offset,size);
             }
+            for(Transrecord transrecord : transrecords){
+                //fromAccountId：支付的账户Id
+                Integer fromAccountId = transrecord.getAccountId();
+                //toAccountId：收款的账户Id
+                Integer toAccountId = transrecord.getOtherId();
+                Integer personId;
+
+                String toPersonName;
+                String type;
+                String toAccountName;
+                String myAccountName = accountMapper.getAccountNameById(accountId);
+                if(fromAccountId.equals(accountId)){
+                    personId = accountMapper.getPersonIdByAccountId(toAccountId);
+                    type = "支出";
+                    toAccountName = accountMapper.getAccountNameById(toAccountId);
+                }else {
+                    personId = accountMapper.getPersonIdByAccountId(fromAccountId);
+                    type = "收入";
+                    toAccountName = accountMapper.getAccountNameById(fromAccountId);
+                }
+                transrecord.setToPerson(personinfoMapper.getPersonNameById(personId));
+                transrecord.setType(type);
+                transrecord.setToAccountName(toAccountName);
+                transrecord.setMyAccountName(myAccountName);
+            }
         }
 //        accounId为空时
         else if(accountId == null){
@@ -98,31 +124,27 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
             } else if(start != null && end != null){
                 transrecords = baseMapper.getTransrecordsByAccountIdsAndTime(accountIds,start,end,offset,size);
             }
-        }
-
-        for(Transrecord transrecord : transrecords){
-            //fromAccountId：支付的账户Id
-            Integer fromAccountId = transrecord.getAccountId();
-            //toAccountId：收款的账户Id
-            Integer toAccountId = transrecord.getOtherId();
-            Integer personId;
-            String type;
-            String accountName;
-
-            if(fromAccountId.equals(accountId)){
-                personId = accountMapper.getPersonIdByAccountId(toAccountId);
-                type = "支出";
-                accountName = accountMapper.getAccountNameById(toAccountId);
-            }else {
-                personId = accountMapper.getPersonIdByAccountId(fromAccountId);
-                type = "收入";
-                accountName = accountMapper.getAccountNameById(fromAccountId);
+            for (Transrecord transrecord : transrecords){
+                for(Integer id : accountIds){
+                    if(id.equals(transrecord.getAccountId())){
+                        Integer toPersonId = accountMapper.getPersonIdByAccountId(transrecord.getOtherId());
+                        String toAccountName = accountMapper.getAccountNameById(transrecord.getOtherId());
+                        String toPersonName = personinfoMapper.getPersonNameById(toPersonId);
+                        transrecord.setToPerson(toPersonName);
+                        transrecord.setType("支出");
+                        transrecord.setMyAccountName(accountMapper.getAccountNameById(id));
+                        transrecord.setToAccountName(toAccountName);
+                    }else {
+                        Integer toPersonId = accountMapper.getPersonIdByAccountId(transrecord.getAccountId());
+                        String toAccountName = accountMapper.getAccountNameById(transrecord.getAccountId());
+                        String toPersonName = personinfoMapper.getPersonNameById(toPersonId);
+                        transrecord.setToPerson(toPersonName);
+                        transrecord.setType("收入");
+                        transrecord.setMyAccountName(accountMapper.getAccountNameById(id));
+                        transrecord.setToAccountName(toAccountName);
+                    }
+                }
             }
-            String personName = personinfoMapper.getPersonNameById(personId);
-            transrecord.setToPerson(personName);
-            transrecord.setType(type);
-            //TODO:设置冗余字段accountName
-            transrecord.setAccountName(accountName);
         }
         return transrecords;
     }

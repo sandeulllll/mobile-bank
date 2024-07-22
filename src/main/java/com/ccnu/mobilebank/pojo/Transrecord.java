@@ -79,6 +79,9 @@ public class Transrecord implements Serializable {
 
     //冗余字段
     private String type;
+    //冗余字段:对方的账户名
+    private String toAccountName;
     //冗余字段
-    private String accountName;
+    private String myAccountName;
+
 }
