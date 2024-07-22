@@ -117,6 +117,7 @@ public class AccountController {
         queryWrapper.eq("accountName",accountName);
         Account account = new Account();
         account.setPassword(password);
+        accountService.update(account,queryWrapper);
         return JsonResponse.success();
     }
 
