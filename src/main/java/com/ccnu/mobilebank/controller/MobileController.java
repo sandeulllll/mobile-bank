@@ -94,9 +94,10 @@ public class MobileController {
 
     //验证码通过后只提交新密码(测试完毕)
     @PostMapping("/password")
-    public JsonResponse<String> updatePwdByCode(@RequestParam String newPassword){
-        Integer mobileId = userSupport.getCurrentMobileId();
-        mobileService.updateMobilePassword(mobileId,newPassword);
+    public JsonResponse<String> updatePwdByCode(@RequestParam String telephone,@RequestParam String newPassword){
+//        Integer mobileId = userSupport.getCurrentMobileId();
+
+        mobileService.updateMobilePassword(telephone,newPassword);
         return JsonResponse.success();
     }
 }

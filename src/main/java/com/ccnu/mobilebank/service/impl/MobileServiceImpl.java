@@ -64,12 +64,11 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
     }
 
     @Override
-    public void updateMobilePassword(Integer mobileId, String newPassword) {
-        Mobile dbMobile = baseMapper.getMobileById(mobileId);
+    public void updateMobilePassword(String telephone, String newPassword) {
+        Mobile dbMobile = baseMapper.getMobileByTel(telephone);
         dbMobile.setPassword(newPassword);
         baseMapper.updateMobilePassword(dbMobile);
     }
-
 
     /**
      * 1. 验证手机号是否已注册
