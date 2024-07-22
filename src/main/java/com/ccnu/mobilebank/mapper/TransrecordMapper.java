@@ -19,15 +19,11 @@ import java.util.List;
 public interface TransrecordMapper extends BaseMapper<Transrecord> {
     List<Transrecord> getPeriodIncome(@Param("accountId") Integer accountId,
                                       @Param("start") LocalDateTime start,
-                                      @Param("end") LocalDateTime end,
-                                      @Param("offset") int offset,
-                                      @Param("size") int size);
+                                      @Param("end") LocalDateTime end);
 
     List<Transrecord> getPeriodOutcome(@Param("accountId") Integer accountId,
                                        @Param("start") LocalDateTime start,
-                                       @Param("end") LocalDateTime end,
-                                       @Param("offset") int offset,
-                                       @Param("size") int size);
+                                       @Param("end") LocalDateTime end);
 
     List<Transrecord> getTransrecordsByAccountId(Integer accountId, int offset, int size);
 
@@ -56,16 +52,12 @@ public interface TransrecordMapper extends BaseMapper<Transrecord> {
     List<Transrecord> getPeriodIncomeByAccountIds(
             @Param("accountIds") List<Integer> accountIds,
             @Param("start") LocalDateTime start,
-            @Param("end") LocalDateTime end,
-            @Param("offset") int offset,
-            @Param("size") int size);
+            @Param("end") LocalDateTime end);
 
     List<Transrecord> getPeriodOutcomeByAccountIds(
             @Param("accountIds") List<Integer> accountIds,
             @Param("start") LocalDateTime start,
-            @Param("end") LocalDateTime end,
-            @Param("offset") int offset,
-            @Param("size") int size);
+            @Param("end") LocalDateTime end);
 
     long getTotalCountByAccountId(Integer accountId);
 

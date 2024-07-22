@@ -25,11 +25,9 @@ public class TransrecordController {
     public JsonResponse<List<PagedResponse<Map<BigDecimal,LocalDateTime>>>> getPeriodAmounts(
             @RequestParam(required = false) Integer accountId,
             @RequestParam LocalDateTime start,
-            @RequestParam LocalDateTime end,
-            @RequestParam int page,
-            @RequestParam int size){
-        PagedResponse<List<Transrecord>> income = transrecordService.getPeriodIncome(accountId,start,end,page,size);
-        PagedResponse<List<Transrecord>> outcome = transrecordService.getPeriodOutcome(accountId,start,end,page,size);
+            @RequestParam LocalDateTime end){
+        PagedResponse<List<Transrecord>> income = transrecordService.getPeriodIncome(accountId,start,end);
+        PagedResponse<List<Transrecord>> outcome = transrecordService.getPeriodOutcome(accountId,start,end);
 
         Map<BigDecimal,LocalDateTime> incomeList = new HashMap<>();
         Map<BigDecimal,LocalDateTime> outcomeList = new HashMap<>();

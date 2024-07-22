@@ -40,35 +40,33 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     private PersoninfoMapper personinfoMapper;
 
     @Override
-    public PagedResponse<List<Transrecord>> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end, int page, int size) {
-        int offset = (page - 1) * size;
+    public PagedResponse<List<Transrecord>> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end) {
         List<Transrecord> income;
         long total;
         if(accountId != null){
-            income = baseMapper.getPeriodIncome(accountId, start, end,offset,size);
+            income = baseMapper.getPeriodIncome(accountId, start, end);
             total = baseMapper.getTotalIncomeByAccountIdAndTime(accountId, start, end);
         } else{
             Integer userPersonId = userSupport.getCurrentPersonId();
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
-            income = baseMapper.getPeriodIncomeByAccountIds(accountIds,start,end,offset,size);
+            income = baseMapper.getPeriodIncomeByAccountIds(accountIds,start,end);
             total = baseMapper.getTotalIncomeByAccountIdsAndTime(accountIds, start, end);
         }
         return new PagedResponse<>(income, total);
     }
 
     @Override
-    public PagedResponse<List<Transrecord>> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end,int page,int size) {
+    public PagedResponse<List<Transrecord>> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end) {
         List<Transrecord> outcome;
         long total;
-        int offset = (page - 1) * size;
 
         if(accountId != null){
-           outcome = baseMapper.getPeriodOutcome(accountId,start,end,offset,size);
+           outcome = baseMapper.getPeriodOutcome(accountId,start,end);
            total = baseMapper.getTotalOutcomeByAccountIdAndTime(accountId, start, end);
         }else {
             Integer userPersonId = userSupport.getCurrentPersonId();
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
-            outcome = baseMapper.getPeriodOutcomeByAccountIds(accountIds,start,end,offset,size);
+            outcome = baseMapper.getPeriodOutcomeByAccountIds(accountIds,start,end);
             total = baseMapper.getTotalOutcomeByAccountIdsAndTime(accountIds, start, end);
         }
         return new PagedResponse<>(outcome, total);
