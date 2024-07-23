@@ -1,16 +1,13 @@
 package com.ccnu.mobilebank.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ccnu.mobilebank.exception.ConditionException;
+import com.ccnu.mobilebank.mapper.MobileMapper;
 import com.ccnu.mobilebank.mapper.PersoninfoMapper;
 import com.ccnu.mobilebank.pojo.Mobile;
-import com.ccnu.mobilebank.mapper.MobileMapper;
 import com.ccnu.mobilebank.pojo.Personinfo;
-import com.ccnu.mobilebank.pojo.exception.ConditionException;
 import com.ccnu.mobilebank.service.IMobileService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ccnu.mobilebank.service.IPersoninfoService;
 import com.ccnu.mobilebank.util.TokenUtil;
-import jakarta.annotation.Resource;
-import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.ccnu.mobilebank.handler;
 
 import com.ccnu.mobilebank.pojo.JsonResponse;
-import com.ccnu.mobilebank.pojo.exception.ConditionException;
+import com.ccnu.mobilebank.exception.ConditionException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

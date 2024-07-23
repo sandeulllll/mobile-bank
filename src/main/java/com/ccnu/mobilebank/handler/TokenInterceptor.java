@@ -1,6 +1,6 @@
 package com.ccnu.mobilebank.handler;
 
-import com.ccnu.mobilebank.pojo.exception.ConditionException;
+import com.ccnu.mobilebank.exception.ConditionException;
 import com.ccnu.mobilebank.util.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

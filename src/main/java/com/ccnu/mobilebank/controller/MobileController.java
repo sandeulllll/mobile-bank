@@ -1,16 +1,14 @@
 package com.ccnu.mobilebank.controller;
 
+import com.ccnu.mobilebank.exception.ConditionException;
 import com.ccnu.mobilebank.pojo.JsonResponse;
 import com.ccnu.mobilebank.pojo.Mobile;
-import com.ccnu.mobilebank.pojo.exception.ConditionException;
 import com.ccnu.mobilebank.service.IMobileService;
 import com.ccnu.mobilebank.support.UserSupport;
 import com.ccnu.mobilebank.util.VerificationCodeUtil;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
 
 
 @RestController
