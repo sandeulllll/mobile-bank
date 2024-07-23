@@ -69,9 +69,16 @@ public class RecipientController {
     @PostMapping("/add")
     public JsonResponse<String> addRecipient(@RequestParam String accountName, @RequestParam String name) {
         // 1. 判断该用户是否存在
-        QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("accountName",accountName).eq("realname",name);
-        Account account = accountService.getOne(queryWrapper);
+        QueryWrapper<Personinfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("realname",name);
+        Personinfo personinfo = personinfoService.getOne(queryWrapper);
+        if(personinfo == null)
+            if(personinfo == null)
+                throw new ConditionException("512","用户不存在!");
+
+        QueryWrapper<Account> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("accountName",accountName).eq("personId",personinfo.getId());
+        Account account = accountService.getOne(queryWrapper1);
         if(account == null)
             throw new ConditionException("512","用户不存在!");
 
