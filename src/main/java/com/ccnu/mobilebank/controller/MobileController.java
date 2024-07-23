@@ -32,6 +32,8 @@ public class MobileController {
     @PostMapping("/get-code")
     public JsonResponse<String> getCode(@RequestParam String telephone) {
         String phone = telephone;
+        //TODO:判断是否存在
+        mobileService.checkPhoneInPersonInfo(telephone);
         //生成验证码并存储到 Redis 中，有效期为60秒
         String code = verificationCodeUtil.generateCode(phone, 60);
         return new JsonResponse<>(code);

@@ -63,8 +63,19 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
     @Override
     public void updateMobilePassword(String telephone, String newPassword) {
         Mobile dbMobile = baseMapper.getMobileByTel(telephone);
+        if(dbMobile == null){
+            throw new ConditionException("506","该手机号未注册!");
+        }
         dbMobile.setPassword(newPassword);
         baseMapper.updateMobilePassword(dbMobile);
+    }
+
+    @Override
+    public void checkPhoneInPersonInfo(String telephone) {
+        Mobile dbMobile = baseMapper.getMobileByTel(telephone);
+        if(dbMobile == null){
+            throw new ConditionException("503","该用户手机号不存在!");
+        }
     }
 
     /**

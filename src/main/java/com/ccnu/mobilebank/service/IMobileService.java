@@ -19,4 +19,6 @@ public interface IMobileService extends IService<Mobile> {
     void updateMobilePassword(Integer mobileId, String password, String newPassword);
 
     void updateMobilePassword(String telephone, String newPassword);
+
+    void checkPhoneInPersonInfo(String telephone);
 }
