@@ -58,4 +58,7 @@ public class Recipient implements Serializable {
 
     @TableField(exist=false)
     private Personinfo personinfo;
+
+    @TableField(exist = false)
+    private String accountName;
 }

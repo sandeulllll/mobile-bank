@@ -53,6 +53,7 @@ public class RecipientController {
             Account account = accountService.getById(recipients.getOtherId());
             Personinfo personinfo = personinfoService.getById(account.getPersonId());
             recipients.setPersoninfo(personinfo);
+            recipients.setAccountName(account.getAccountName());
         }
 
         return new JsonResponse<>(list);
