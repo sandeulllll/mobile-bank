@@ -22,24 +22,24 @@ public class TransrecordController {
 
     //根据账户id和时间段返回收入和支出概况（已测试）
     @PostMapping("/period-amounts")
-    public JsonResponse<List<PagedResponse<Map<BigDecimal,LocalDateTime>>>> getPeriodAmounts(
+    public JsonResponse<List<PagedResponse<Map<BigDecimal,String>>>> getPeriodAmounts(
             @RequestParam(required = false) Integer accountId,
             @RequestParam LocalDateTime start,
             @RequestParam LocalDateTime end){
         PagedResponse<List<Transrecord>> income = transrecordService.getPeriodIncome(accountId,start,end);
         PagedResponse<List<Transrecord>> outcome = transrecordService.getPeriodOutcome(accountId,start,end);
 
-        Map<BigDecimal,LocalDateTime> incomeList = new HashMap<>();
-        Map<BigDecimal,LocalDateTime> outcomeList = new HashMap<>();
+        Map<BigDecimal,String> incomeList = new HashMap<>();
+        Map<BigDecimal,String> outcomeList = new HashMap<>();
         for(Transrecord transrecord : income.getData()){
-            incomeList.put(transrecord.getMoney(),transrecord.getUpdateTime());
+            incomeList.put(transrecord.getMoney(),transrecord.getTransDate());
         }
         for (Transrecord transrecord : outcome.getData()){
-            outcomeList.put(transrecord.getMoney(),transrecord.getUpdateTime());
+            outcomeList.put(transrecord.getMoney(),transrecord.getTransDate());
         }
-        List<PagedResponse<Map<BigDecimal,LocalDateTime>>> result = new ArrayList<>();
-        PagedResponse<Map<BigDecimal,LocalDateTime>> incomeResults = new PagedResponse<>(incomeList,income.getTotal());
-        PagedResponse<Map<BigDecimal,LocalDateTime>> outcomeResults = new PagedResponse<>(outcomeList,outcome.getTotal());
+        List<PagedResponse<Map<BigDecimal,String>>> result = new ArrayList<>();
+        PagedResponse<Map<BigDecimal,String>> incomeResults = new PagedResponse<>(incomeList,income.getTotal());
+        PagedResponse<Map<BigDecimal,String>> outcomeResults = new PagedResponse<>(outcomeList,outcome.getTotal());
         result.add(incomeResults);
         result.add(outcomeResults);
         return new JsonResponse<>(result);
