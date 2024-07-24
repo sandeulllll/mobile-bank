@@ -26,7 +26,7 @@ public class MobileController {
 
     @GetMapping("/test")
     public String test(){
-        return "success!";
+        return "第六组测试!";
     }
     //获取验证码(测试完毕)
     @PostMapping("/get-code")
