@@ -72,8 +72,9 @@ public class MobileServiceImpl extends ServiceImpl<MobileMapper, Mobile> impleme
 
     @Override
     public void checkPhoneInPersonInfo(String telephone) {
-        Mobile dbMobile = baseMapper.getMobileByTel(telephone);
-        if(dbMobile == null){
+//        Mobile dbMobile = baseMapper.getMobileByTel(telephone);
+        Personinfo dbPersoninfo = personinfoMapper.getPersonInfoByTel(telephone);
+        if(dbPersoninfo == null){
             throw new ConditionException("503","该用户手机号不存在!");
         }
     }
