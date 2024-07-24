@@ -7,9 +7,11 @@ import com.ccnu.mobilebank.pojo.JsonResponse;
 import com.ccnu.mobilebank.pojo.Mobileaccount;
 import com.ccnu.mobilebank.service.IAccountService;
 import com.ccnu.mobilebank.service.IMobileaccountService;
-import com.ccnu.mobilebank.support.UserSupport;
+import com.ccnu.mobilebank.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,8 +31,7 @@ import java.util.Map;
 @RequestMapping("/accounts")
 public class AccountController {
 
-    @Autowired
-    private UserSupport userSupport;
+
     @Autowired
     private IAccountService accountService;
     @Autowired
@@ -40,7 +41,9 @@ public class AccountController {
     @GetMapping("/listBankAccount")
     public JsonResponse<List<Mobileaccount>> listBankAccount(){
         // 1. 获取登录用户的手机号id
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
 //        Integer mobileId = 16;
 
         // 2. 在mobileaccount表中查询绑定该手机号的accountid
@@ -61,8 +64,10 @@ public class AccountController {
     @PostMapping("/addRelatedAccount")
     public JsonResponse<String> addRelatedAccount(@RequestParam String accountName){
         // 1. 获取用户的personId，mobileId
-        Integer personId = userSupport.getCurrentPersonId();
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
+        Integer personId = TokenUtil.verifyToken(token).get(1);
 //        Integer personId = 3;
         // 2. 在account表中查询对应的银行卡信息
         QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
@@ -124,7 +129,10 @@ public class AccountController {
      // 查询总资产
      @RequestMapping("/queryTotalAssets")
      public JsonResponse<BigDecimal> queryTotalAssets(){
-        Integer mobileId = userSupport.getCurrentMobileId();
+
+         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+         String token = requestAttributes.getRequest().getHeader("token");
+         Integer mobileId = TokenUtil.verifyToken(token).get(0);
 
         // 1. 在mobileaccount中查询所有的关联账户
         QueryWrapper<Mobileaccount> queryWrapper = new QueryWrapper<>();

@@ -9,9 +9,11 @@ import com.ccnu.mobilebank.pojo.UserInfo;
 import com.ccnu.mobilebank.service.IMobileService;
 import com.ccnu.mobilebank.service.IPersoninfoService;
 import com.ccnu.mobilebank.service.IUserInfoService;
-import com.ccnu.mobilebank.support.UserSupport;
+import com.ccnu.mobilebank.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -36,13 +38,13 @@ public class UserInfoController {
     @Autowired
     private IUserInfoService userInfoService;
 
-    @Autowired
-    private UserSupport userSupport;
 
     // 查看个人信息
     @GetMapping("/info")
     public JsonResponse<Personinfo> getPersonInfo() {
-        Integer personId = userSupport.getCurrentPersonId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer personId = TokenUtil.verifyToken(token).get(1);
         Personinfo personinfo = personinfoService.getById(personId);
         return new JsonResponse<>(personinfo);
     }
@@ -50,7 +52,9 @@ public class UserInfoController {
     // 获取头像
     @GetMapping("/avatar")
     public JsonResponse<String> getAvatar() {
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
         String url = userInfoService.selectAvatar(mobileId);
         return new JsonResponse<>(url);
     }
@@ -83,7 +87,9 @@ public class UserInfoController {
 
         // 5. 存储完整路径
         String fileUrl = "/files/" + newFileName;
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("mobileId", mobileId);
 
@@ -106,7 +112,9 @@ public class UserInfoController {
     // 验证登录密码
     @PostMapping("/verifyPassword")
     public JsonResponse<String> verifyPassword(@RequestParam String password) {
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
         Mobile mobile = mobileService.getById(mobileId);
         if (!mobile.getPassword().equals(password))
             throw new ConditionException("505","登录密码错误！");
@@ -116,7 +124,9 @@ public class UserInfoController {
     // 修改登录密码
     @PutMapping("/updatePassword")
     public JsonResponse<String> updatePassword(@RequestParam String password) {
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
         Mobile mobile = new Mobile();
         mobile.setPassword(password);
         mobile.setId(mobileId);

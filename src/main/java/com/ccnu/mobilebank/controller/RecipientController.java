@@ -9,9 +9,11 @@ import com.ccnu.mobilebank.pojo.Recipient;
 import com.ccnu.mobilebank.service.IAccountService;
 import com.ccnu.mobilebank.service.IPersoninfoService;
 import com.ccnu.mobilebank.service.IRecipientService;
-import com.ccnu.mobilebank.support.UserSupport;
+import com.ccnu.mobilebank.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,14 +37,14 @@ public class RecipientController {
     @Autowired
     private IAccountService accountService;
 
-    @Autowired
-    private UserSupport userSupport;
 
     // 获取联系人列表
     @GetMapping("/list")
     public JsonResponse<List<Recipient>> getRecipientList() {
         // 1. 根据登录用户的telId在recipient中查询联系人的accountId列表
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
 //        Integer mobileId = 16;
         Map<String,Object> map = new HashMap<>();
         map.put("telId",mobileId);
@@ -84,7 +86,9 @@ public class RecipientController {
             throw new ConditionException("512","用户不存在!");
 
         // 2. 根据登录用户的telId在recipient中查询联系人的列表
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
         Map<String,Object> map = new HashMap<>();
         map.put("telId",mobileId);
         List<Recipient> list = recipientService.listByMap(map);

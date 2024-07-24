@@ -9,9 +9,11 @@ import com.ccnu.mobilebank.pojo.Account;
 import com.ccnu.mobilebank.pojo.PagedResponse;
 import com.ccnu.mobilebank.pojo.Transrecord;
 import com.ccnu.mobilebank.service.ITransrecordService;
-import com.ccnu.mobilebank.support.UserSupport;
+import com.ccnu.mobilebank.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,8 +33,7 @@ import java.util.Set;
 @Service
 public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Transrecord> implements ITransrecordService {
 
-    @Autowired
-    private UserSupport userSupport;
+
     @Autowired
     private AccountMapper accountMapper;
 
@@ -47,7 +48,10 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
             income = baseMapper.getPeriodIncome(accountId, start, end);
             total = baseMapper.getTotalIncomeByAccountIdAndTime(accountId, start, end);
         } else{
-            Integer userPersonId = userSupport.getCurrentPersonId();
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            String token = requestAttributes.getRequest().getHeader("token");
+            Integer userPersonId = TokenUtil.verifyToken(token).get(1);
+
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
             income = baseMapper.getPeriodIncomeByAccountIds(accountIds,start,end);
             total = baseMapper.getTotalIncomeByAccountIdsAndTime(accountIds, start, end);
@@ -64,7 +68,10 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
            outcome = baseMapper.getPeriodOutcome(accountId,start,end);
            total = baseMapper.getTotalOutcomeByAccountIdAndTime(accountId, start, end);
         }else {
-            Integer userPersonId = userSupport.getCurrentPersonId();
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            String token = requestAttributes.getRequest().getHeader("token");
+            Integer userPersonId = TokenUtil.verifyToken(token).get(1);
+
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
             outcome = baseMapper.getPeriodOutcomeByAccountIds(accountIds,start,end);
             total = baseMapper.getTotalOutcomeByAccountIdsAndTime(accountIds, start, end);
@@ -115,7 +122,11 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
         }
 //        accounId为空时
         else if(accountId == null){
-            Integer userPersonId = userSupport.getCurrentPersonId();
+
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            String token = requestAttributes.getRequest().getHeader("token");
+            Integer userPersonId = TokenUtil.verifyToken(token).get(1);
+
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
             if(start == null && end == null){
                 transrecords = baseMapper.getTransrecordsByAccountIds(accountIds,offset,size);
@@ -226,7 +237,10 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
                 return baseMapper.getTotalCountByAccountIdAndTime(accountId, start, end);
             }
         } else {
-            Integer userPersonId = userSupport.getCurrentPersonId();
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            String token = requestAttributes.getRequest().getHeader("token");
+            Integer userPersonId = TokenUtil.verifyToken(token).get(1);
+
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
             if (start == null && end == null) {
                 return baseMapper.getTotalCountByAccountIds(accountIds);

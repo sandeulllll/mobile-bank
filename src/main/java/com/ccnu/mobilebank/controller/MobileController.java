@@ -4,11 +4,13 @@ import com.ccnu.mobilebank.exception.ConditionException;
 import com.ccnu.mobilebank.pojo.JsonResponse;
 import com.ccnu.mobilebank.pojo.Mobile;
 import com.ccnu.mobilebank.service.IMobileService;
-import com.ccnu.mobilebank.support.UserSupport;
+import com.ccnu.mobilebank.util.TokenUtil;
 import com.ccnu.mobilebank.util.VerificationCodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 @RestController
@@ -17,8 +19,6 @@ public class MobileController {
 
     @Autowired
     private IMobileService mobileService;
-    @Autowired
-    private UserSupport userSupport;
     @Autowired
     private VerificationCodeUtil verificationCodeUtil;
     @Autowired
@@ -87,7 +87,9 @@ public class MobileController {
     //使用原密码修改登录密码(测试完毕)
     @PutMapping("/password")
     public JsonResponse<String> updateMobilePassword(@RequestParam String password,@RequestParam String newPassword){
-        Integer mobileId = userSupport.getCurrentMobileId();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        Integer mobileId = TokenUtil.verifyToken(token).get(0);
         mobileService.updateMobilePassword(mobileId,password,newPassword);
         return JsonResponse.success();
     }
@@ -95,8 +97,6 @@ public class MobileController {
     //验证码通过后只提交新密码(测试完毕)
     @PostMapping("/password")
     public JsonResponse<String> updatePwdByCode(@RequestParam String telephone,@RequestParam String newPassword){
-//        Integer mobileId = userSupport.getCurrentMobileId();
-
         mobileService.updateMobilePassword(telephone,newPassword);
         return JsonResponse.success();
     }
