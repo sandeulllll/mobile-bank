@@ -41,12 +41,12 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
     private PersoninfoMapper personinfoMapper;
 
     @Override
-    public PagedResponse<List<Transrecord>> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end) {
+    public List<Transrecord> getPeriodIncome(Integer accountId, LocalDateTime start, LocalDateTime end) {
         List<Transrecord> income;
-        long total;
+//        long total;
         if(accountId != null){
             income = baseMapper.getPeriodIncome(accountId, start, end);
-            total = baseMapper.getTotalIncomeByAccountIdAndTime(accountId, start, end);
+//            total = baseMapper.getTotalIncomeByAccountIdAndTime(accountId, start, end);
         } else{
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             String token = requestAttributes.getRequest().getHeader("token");
@@ -54,19 +54,19 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
 
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
             income = baseMapper.getPeriodIncomeByAccountIds(accountIds,start,end);
-            total = baseMapper.getTotalIncomeByAccountIdsAndTime(accountIds, start, end);
+//            total = baseMapper.getTotalIncomeByAccountIdsAndTime(accountIds, start, end);
         }
-        return new PagedResponse<>(income, total);
+        return income;
     }
 
     @Override
-    public PagedResponse<List<Transrecord>> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end) {
+    public List<Transrecord> getPeriodOutcome(Integer accountId, LocalDateTime start, LocalDateTime end) {
         List<Transrecord> outcome;
-        long total;
+//        long total;
 
         if(accountId != null){
            outcome = baseMapper.getPeriodOutcome(accountId,start,end);
-           total = baseMapper.getTotalOutcomeByAccountIdAndTime(accountId, start, end);
+//           total = baseMapper.getTotalOutcomeByAccountIdAndTime(accountId, start, end);
         }else {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             String token = requestAttributes.getRequest().getHeader("token");
@@ -74,9 +74,9 @@ public class TransrecordServiceImpl extends ServiceImpl<TransrecordMapper, Trans
 
             List<Integer> accountIds = accountMapper.getAccountIdsByPersonId(userPersonId);
             outcome = baseMapper.getPeriodOutcomeByAccountIds(accountIds,start,end);
-            total = baseMapper.getTotalOutcomeByAccountIdsAndTime(accountIds, start, end);
+//            total = baseMapper.getTotalOutcomeByAccountIdsAndTime(accountIds, start, end);
         }
-        return new PagedResponse<>(outcome, total);
+        return outcome;
     }
 
     //获取交易记录

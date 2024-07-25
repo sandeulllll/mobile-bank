@@ -1,6 +1,7 @@
 package com.ccnu.mobilebank.controller;
 
 import com.ccnu.mobilebank.pojo.JsonResponse;
+import com.ccnu.mobilebank.pojo.MoneyDate;
 import com.ccnu.mobilebank.pojo.PagedResponse;
 import com.ccnu.mobilebank.pojo.Transrecord;
 import com.ccnu.mobilebank.service.ITransrecordService;
@@ -22,26 +23,30 @@ public class TransrecordController {
 
     //根据账户id和时间段返回收入和支出概况（已测试）
     @PostMapping("/period-amounts")
-    public JsonResponse<List<PagedResponse<Map<BigDecimal,String>>>> getPeriodAmounts(
+    public JsonResponse<List<List<MoneyDate>>> getPeriodAmounts(
             @RequestParam(required = false) Integer accountId,
             @RequestParam LocalDateTime start,
             @RequestParam LocalDateTime end){
-        PagedResponse<List<Transrecord>> income = transrecordService.getPeriodIncome(accountId,start,end);
-        PagedResponse<List<Transrecord>> outcome = transrecordService.getPeriodOutcome(accountId,start,end);
+        List<Transrecord> income = transrecordService.getPeriodIncome(accountId,start,end);
+        List<Transrecord> outcome = transrecordService.getPeriodOutcome(accountId,start,end);
 
-        Map<BigDecimal,String> incomeList = new HashMap<>();
-        Map<BigDecimal,String> outcomeList = new HashMap<>();
-        for(Transrecord transrecord : income.getData()){
-            incomeList.put(transrecord.getMoney(),transrecord.getTransDate());
+        /*Map<BigDecimal,String> incomeList = new HashMap<>();
+        Map<BigDecimal,String> outcomeList = new HashMap<>();*/
+        List<MoneyDate> incomeList = new ArrayList<>();
+        List<MoneyDate> outcomeList = new ArrayList<>();
+        for(Transrecord transrecord : income){
+//            incomeList.put(transrecord.getMoney(),transrecord.getTransDate());
+            incomeList.add(new MoneyDate(transrecord.getMoney(),transrecord.getTransDate()));
         }
-        for (Transrecord transrecord : outcome.getData()){
-            outcomeList.put(transrecord.getMoney(),transrecord.getTransDate());
+        for (Transrecord transrecord : outcome){
+//            outcomeList.put(transrecord.getMoney(),transrecord.getTransDate());
+            outcomeList.add(new MoneyDate(transrecord.getMoney(),transrecord.getTransDate()));
         }
-        List<PagedResponse<Map<BigDecimal,String>>> result = new ArrayList<>();
-        PagedResponse<Map<BigDecimal,String>> incomeResults = new PagedResponse<>(incomeList,income.getTotal());
-        PagedResponse<Map<BigDecimal,String>> outcomeResults = new PagedResponse<>(outcomeList,outcome.getTotal());
-        result.add(incomeResults);
-        result.add(outcomeResults);
+        List<List<MoneyDate>> result = new ArrayList<>();
+        /*Map<BigDecimal,String> incomeResults = new PagedResponse<>(incomeList,income.getTotal());
+        Map<BigDecimal,String> outcomeResults = new PagedResponse<>(outcomeList,outcome.getTotal());*/
+        result.add(incomeList);
+        result.add(outcomeList);
         return new JsonResponse<>(result);
     }
 
